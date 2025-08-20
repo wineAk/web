@@ -1,0 +1,140 @@
+/************************************
+** 資料ダウンロード専用設定
+************************************/
+.wgt-form .document input[type="checkbox"],
+article.resp form li.clr.document div.col.span_9 label,
+article.resp form li.clr.document div.col.span_9 br {
+  display: none;
+}
+.base-contents__inner {
+  padding-bottom: 80px;
+}
+.flex-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.flex-container > div {
+}
+.flex-item {
+  width: 30%;
+/*  margin: 20px 0;*/
+  margin: 20px auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+/*  justify-content: center;*/
+  align-items: flex-end;
+}
+.flex-item > div {
+  text-align: center;
+  width: 100%;
+}
+.flex-item h2 {
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+.flex-item iframe {
+}
+/************************************
+** button設定
+************************************/
+.button {
+  display: inline-block;
+  width: 200px;
+  height: 54px;
+  text-align: center;
+  text-decoration: none;
+  line-height: 54px;
+  outline: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.button::before, .button::after {
+  position: absolute;
+  z-index: -1;
+  display: block;
+  content: '';
+}
+.button, .button::before, .button::after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+}
+.button {
+  background-color: #80a34a;
+  color: #fff;
+}
+.button:hover {
+  background-color: #D9E3C8;
+  color: #80a34a;
+  opacity: 1;
+}
+/************************************
+** ribbon設定
+************************************/
+.ribbon {
+  background: #fafafa;
+  margin: 0 auto;
+  position: relative;
+}
+.ribbon::before {
+  content: "";
+  top: 0;
+  left: 0;
+  border-bottom: 5em solid transparent;
+  border-left: 5em solid transparent;
+  position: absolute;
+  z-index: 100;
+}
+.ribbon::after {
+  display: block;
+  transform: rotate(-45deg);
+  color: #fff;
+  left: 5px;
+  position: absolute;
+  z-index: 101;
+}
+.ribbon.new::before {
+  border-left-color: #C9242F;
+}
+.ribbon.soon::before {
+  border-left-color: #003F6C;
+}
+.ribbon.new::after {
+  content: "new";
+  top: 12px;
+}
+.ribbon.soon::after {
+  content: "coming\Asoon";
+  white-space: pre ;
+  font-size: 10px;
+  top: 10px;
+}
+@media screen and (max-width: 768px) {
+  div.flex-item {
+    margin: 20px 10px;
+    width: calc(50% - 20px);
+  }
+  .flex-item iframe {
+    width: 100%;
+  }
+  .base-contents h2{
+    font-size: 12px !important;
+  }
+}
+@media screen and (max-width: 480px) {
+  div.flex-item {
+    width: 100%;
+  }
+}

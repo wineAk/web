@@ -1,0 +1,183 @@
+/************************************
+** Webフォーム周り
+**
+************************************/
+html {
+  background-color: #f2f1f1;
+}
+
+.base-page {
+  background-color: #f2f1f1;
+}
+
+.base-main {
+  padding: 3.1em;
+}
+
+.base-contents {
+  max-width: 1000px;
+  background-color: white;
+  margin: auto;
+}
+
+.base-contents.type-gray {
+  background-color: white;
+}
+
+#anchor_inquiryForm>.base-contents__inner {
+  max-width: 100%;
+  padding: 0;
+}
+
+.wgt-form {
+  padding: 0;
+}
+
+.wgt-form__body {
+  padding-top: 0;
+}
+
+article.resp .submit_btn input {
+  background-color: #727d39;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .base-page {
+    margin-top: 0;
+  }
+
+  .base-main {
+    padding: 3.1em 0;
+  }
+
+  .base-contents__inner {
+    padding: 0;
+  }
+}
+
+/************************************
+** UIのデザイン
+**
+************************************/
+/* チェックボックス・ラジオボタン */
+article.resp input[type="checkbox"],
+article.resp input[type="radio"] {
+  background: #fff;
+  outline: 0;
+  vertical-align: middle;
+}
+
+/* ラジオボタン */
+article.resp input[type="radio"] {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin-bottom: 0;
+  margin-right: 0.5rem;
+  border: 1px solid #d4d1cf;
+  border-radius: 50%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+article.resp input[type="radio"]::before {
+  position: absolute;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  content: '';
+  background: #80a34a;
+  border-radius: 50%;
+  -webkit-transform: scale(0, 0);
+  transform: scale(0, 0);
+}
+
+article.resp input[type="radio"]:checked::before {
+  -webkit-transition: -webkit-transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+  transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+  -webkit-transform: scale(1, 1);
+  transform: scale(1, 1);
+}
+
+/************************************
+** 項目必須＆入力時のフォーカス
+**
+************************************/
+article.resp form li.clr label.col.span_3,
+article.resp form li.clr div.col.span_9 {
+  width: 100%;
+  margin: 4px 0 0 40px;
+  padding-right: 80px;
+}
+
+article.resp form li label.span_3.required {
+  position: relative;
+}
+
+.required::before {
+  position: absolute;
+  top: 0;
+  left: -40px;
+  content: "必須";
+  background: rgba(201, 36, 47, 0.1);
+  color: #c9242f;
+  font-size: 12px;
+  padding: 2px 5px;
+  margin-right: 5px;
+}
+
+@media screen and (max-width: 48em) {
+  .required::before {
+    top: -5px;
+  }
+}
+
+article.resp form li.clr label.col.span_3.required:after {
+  content: "";
+}
+
+/* フォーカス周り */
+article.resp input,
+article.resp textarea,
+article.resp select {
+  border: 1px solid #c5c5c5;
+  border-radius: 4px;
+  outline: none;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  transition-property: box-shadow;
+}
+
+article.resp input:focus,
+article.resp textarea:focus,
+article.resp select:focus {
+  box-shadow: 0 0 8px #c5c5c5;
+}
+
+article.resp .required+.input input,
+article.resp .required+.input textarea,
+article.resp .required+div.col.span_9 select {
+  border-color: #c9242f;
+}
+
+article.resp .required+.input input:focus,
+article.resp .required+.input textarea:focus,
+article.resp .required+.input select:focus {
+  box-shadow: 0 0 8px #c9242f;
+}
+
+.wgt-form input[type="checkbox"]:checked:after {
+  width: 6px;
+  height: 12px;
+}
+
+article.resp .required+.input input[type="checkbox"]:checked:after {
+  border-color: #c9242f;
+}
+
+article.resp .required+.input input[type="radio"]::before {
+  background: #c9242f;
+}

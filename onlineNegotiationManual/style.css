@@ -1,0 +1,119 @@
+/************************************
+** オンライン商談用CSS
+**
+************************************/
+.mod-header__inner,
+.mod-globalnavi__menuBtn,
+.mod-globalnavi__menu,
+.mod-footer__pagetop {
+    z-index: 0 !important;
+}
+.wgt-heading__inner, #anchor_inquiryForm,
+.display_none, .browser {
+    display: none;
+}
+.alert_text {
+    background-color: #ffeffe;
+    margin: 0 0 1em 0;
+    padding: 10px;
+    color: #C25338;
+    border: 1px solid #D4440D;
+    line-height: 1.5;
+    clear: both;
+    background-repeat: no-repeat;
+    background-position: 5px 5px;
+    background-image: url(https://wineak.github.io/sskc/wf/onlineNegotiationManual/alert.png);
+ }
+.alert_text span {
+    filter:progid: DXImageTransform.Microsoft.AlphaImageLoader(src='https://wineak.github.io/sskc/wf/onlineNegotiationManual/alert.png', sizingMethod='scale');
+    width: 48px;
+    height:48px;
+    position: relative;
+    top: -5px;
+    left: -5px;
+    text-indent: -9999px;
+    float: left;
+    visibility: hidden;
+}
+.wgt_operation .left {
+    float: left;
+    margin: 5px;
+}
+.wgt_operation .clear {
+    clear: both;
+}
+.zoom-in {
+    cursor: zoom-in;
+}
+.wgt_others {
+    text-align: center;
+    margin: 100px auto 110px;
+}
+.wgt_others a:hover {
+    opacity: 1;
+}
+.wgt_button {
+    padding: 1em 2em;
+    border: none;
+    display: inline-block;
+    background-color: #80a34a;
+    box-shadow: 0 6px 2px #3D4C48;
+    border-radius: 4px;
+    font-size: 114%;
+    line-height: 1;
+    color: #fff;
+    position: relative;
+    cursor: pointer;
+    min-width: 150px;
+    text-align: center;
+}
+.wgt_button:hover {
+    box-shadow: 0 5px 1px #3D4C48;
+    top: 1px;
+}
+.wgt_button:active {
+    box-shadow: 0 0 #3D4C48;
+    top: 6px;
+}
+#seminar_form h2 {
+    padding: 10px 48px;
+    font-size: 25px;
+    height: 32px;
+    margin: 50px 0 0 0;
+    background-color: #f6f6f6;
+    border: 1px solid #eee;
+    box-shadow: 1px 1px 0 rgba(255, 255, 255, .5) inset;
+}
+#edge {background: url(https://cdnjs.cloudflare.com/ajax/libs/browser-logos/43.1.0/edge-tile/edge-tile_32x32.png) no-repeat 8px center;}
+#chrome {background: url(https://cdnjs.cloudflare.com/ajax/libs/browser-logos/43.1.0/archive/chrome_12-48/chrome_12-48_32x32.png) no-repeat 8px center;}
+#firefox {background: url(https://cdnjs.cloudflare.com/ajax/libs/browser-logos/43.1.0/archive/firefox_23-56/firefox_23-56_32x32.png) no-repeat 8px center;}
+
+.browser img {
+    border: 2px #3D4C48 solid;
+    width: 320px;
+    height: auto;
+}
+/************************************
+** モバイル対応
+**
+************************************/
+@media screen and (max-width: 768px) {
+  /* ブラウザタイトル */
+  h2 span {
+    display: none;
+  }
+  /* イメージ */
+  .wgt_operation .left {
+    float: none;
+  }
+  .browser {
+    text-align: center;
+  }
+  .browser p {
+    text-align: left;
+    margin-top: 0;
+  }
+  .browser img {
+    width: 90%;
+  }
+}

@@ -1,0 +1,408 @@
+:root {
+  --header-main-color: #f6f6f6;
+  --header-sub-color: #ccc;
+  --modal-main-color: #e0edff;
+  --modal-sub-color: #555;
+  --card-main-color: #727D39;
+  --card-sub-color: #fff;
+  --file-main-color: #44397D;
+  --file-sub-color: #fff;
+}
+
+/************************************
+** ヘッダー
+**
+************************************/
+.header-container {
+  padding: 15px 30px;
+}
+
+.header-inner {
+  box-sizing: border-box;
+  color: inherit;
+  /*display: block;*/
+  /*font-size: 18px;*/
+  font-weight: bold;
+  /*padding: 20px 0;*/
+  text-align: left;
+  vertical-align: inherit;
+  width: 100%;
+  background-color: var(--header-main-color);
+  border-left: 6px solid var(--header-sub-color);
+  font-size: 22px;
+  margin: 30px 0 15px 0;
+  padding: .5em .75em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  position: inherit !important;
+}
+
+.header-profile {
+  font-size: 1rem;
+}
+
+.header-profile p {
+  margin: 0;
+}
+
+.header-face {
+  border-radius: 50%;
+  margin: 1rem;
+  width: 120px;
+}
+
+.header-position br {
+  display: none;
+}
+
+.header-name {
+  font-size: 2rem;
+}
+
+@media screen and (max-width: 768px) {
+  .header-inner {
+    padding: .5em 0;
+  }
+
+  .header-face {
+    width: 60px;
+  }
+
+  .header-profile {
+    font-size: .8rem;
+  }
+
+  .header-name {
+    font-size: 1.5rem;
+  }
+
+  .header-position br {
+    display: inline;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .header-container {
+    padding: 15px;
+  }
+}
+
+/************************************
+** 名刺テーブル
+**
+************************************/
+.card-container {
+  padding: 15px 30px;
+}
+
+.card-inner {
+  display: flex;
+  justify-content: space-around;
+}
+
+.card-container .radio-inner {
+  height: 20px;
+  margin: 1rem auto;
+}
+
+.card-table {
+  margin: 0 1rem;
+  flex-grow: 1;
+}
+
+.card-table table+table {
+  border-top: 0;
+  display: none;
+}
+
+.card-image {
+  margin: 0 1rem;
+  flex-grow: 0;
+  text-align: center;
+}
+
+.card-image img {
+  width: 320px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .5);
+}
+
+.card-title {
+  width: 250px;
+  padding: 0.8em;
+  margin: 1rem auto;
+  text-align: center;
+  text-decoration: none;
+  color: var(--card-main-color);
+  border: 2px solid var(--card-main-color);
+  border-radius: 5px;
+  background: var(--card-sub-color);
+  font-weight: bold;
+  transition: transform ease .3s;
+}
+
+.card-title:hover {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.card-title span {
+  display: inline-block;
+  text-decoration: none;
+  transition: transform ease .3s;
+  cursor: pointer;
+}
+
+.card-open .card-title:hover span {
+  /*transform: translateY(6px);*/
+}
+
+.card-close {
+  display: none;
+}
+
+.card-close .card-title:hover span {
+  /*transform: translateY(-6px);*/
+}
+
+.card-button {
+  display: none;
+}
+
+.card-dl {
+  display: block;
+  color: var(--file-sub-color);
+  border: 0;
+  border-radius: 30px;
+  background: var(--file-main-color);
+  text-decoration: none;
+}
+
+.card-title.card-dl {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .card-inner {
+    display: block;
+  }
+
+  .card-container {
+    padding: 1.5em 1em;
+  }
+
+  .card-image img {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+/************************************
+** 名刺を登録してください
+**
+************************************/
+.radio-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.radio-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 140px;
+  border: 2px solid var(--card-main-color);
+  border-radius: 5px;
+  color: var(--card-main-color);
+  font-weight: bold;
+  padding: 1rem;
+  margin: 1rem;
+  -webkit-transition: -webkit-transform 300ms ease;
+  transition: -webkit-transform 300ms ease;
+  transition: transform 300ms ease;
+  transition: transform 300ms ease, -webkit-transform 300ms ease;
+  cursor: pointer;
+}
+
+.radio-title svg {
+  fill: var(--card-main-color);
+  margin: 0.5rem;
+}
+
+.radio-button {
+  display: none;
+}
+
+.radio-button:checked+.radio-title {
+  background-color: var(--card-main-color);
+  border: 2px solid var(--card-main-color);
+  color: var(--card-sub-color);
+  transform: scale(1.1, 1.1);
+}
+
+.radio-button:checked+.radio-title svg {
+  fill: var(--card-sub-color);
+}
+
+#input-text-container {
+  display: none;
+  width: 70%;
+  margin: auto;
+}
+
+@media screen and (max-width: 768px) {
+  .radio-title {
+    width: 100px;
+    height: 100px;
+    font-size: 12px;
+    padding: .5rem;
+  }
+
+  .radio-header-container .header-inner {
+    padding: .5em .75em;
+  }
+
+  #input-text-container {
+    width: 100%;
+  }
+}
+
+/************************************
+** モーダル
+**
+************************************/
+.modal {
+  position: fixed;
+  top: 0px;
+  right: 0;
+  z-index: 1;
+  text-align: center;
+  display: none;
+}
+
+.modal-close {
+  right: 0;
+  position: absolute;
+  margin: 10px;
+  padding-bottom: 5px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  z-index: 1;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.modal-close:first-child {
+  z-index: 0;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.modal-balloon {
+  position: relative;
+  display: inline-block;
+  margin: 1.5em;
+  padding: 1.5em;
+  min-width: 120px;
+  max-width: 100%;
+  color: var(--modal-sub-color);
+  font-size: 16px;
+  background: var(--modal-main-color);
+  border-radius: 15px;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+/*
+.modal-balloon:before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -45px;
+  border: 45px solid transparent;
+  border-top: 45px solid var(--modal-main-color);
+}
+*/
+.modal-balloon p {
+  margin: 0;
+  padding: 0;
+}
+
+.modal-image {
+  width: 150px;
+  margin-top: 1.5em;
+}
+
+@media screen and (max-width: 768px) {
+  .modal {
+    display: none !important;
+  }
+}
+
+/************************************
+** その他
+**
+************************************/
+article.resp form li.clr.input-card div.col.span_9 {
+  width: 100%;
+}
+
+#input-card-container .col.span_3 {
+  display: none;
+}
+
+.input-card .span_9 {
+  text-align: center;
+}
+
+.input-card img {
+  max-width: 160px;
+  max-height: 120px;
+}
+
+.file-ui {
+  color: var(--file-sub-color);
+  font-weight: bold;
+  font-size: 18px;
+  background: var(--file-main-color);
+  padding: 8px 0;
+  border-radius: 30px;
+  max-width: 240px;
+  text-align: center;
+  transition: .3s;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.file-container {
+  width: 240px;
+  margin: auto;
+  text-align: center;
+}
+
+article.resp form li.clr div.col.span_9 label {
+  display: block;
+}
+
+.file-container input {
+  width: 0px;
+  opacity: 0;
+  border: 1px solid #fff;
+}
+
+.file-container p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

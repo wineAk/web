@@ -1,0 +1,81 @@
+/* saaske */
+.wgt-heading,
+.mod-breadcrumbs,
+#anchor_inquiryForm {
+  display: none;
+}
+html,
+.base-page {
+  background-color: #FBFBF9;
+}
+body {
+  overflow-y: scroll;
+}
+/* メッセージ */
+.box {
+  margin: 2em 0;
+}
+.box h1 {
+  font-size: 1.2em;
+  background: #E6E9DE;
+  color: #444444;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  padding: 4px;
+  margin: 30px 0 0 0;
+}
+.box h2,
+.box p {
+  margin: 0;
+}
+.box .box-message {
+  font-size: 11px;
+  padding: 5px 20px;
+  margin: 0;
+  display: none;
+}
+.box .box-table {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+.box .table-cell {
+  flex-grow: 1;
+  border:1px #990000 dashed;
+  padding: 5px;
+  max-width: 50%;
+  margin: 10px 5px;
+}
+.box blockquote {
+  position: relative;
+  margin: 0 40px;
+  padding: 10px 15px 10px 50px;
+  box-sizing: border-box;
+  font-style: italic;
+  border: solid 2px #464646;
+  color: #464646;
+}
+.box blockquote:before{
+  display: inline-block;
+  position: absolute;
+  top: 20px;
+  left: 15px;
+  vertical-align: middle;
+  content: "\f10d";
+  font-family: FontAwesome;
+  color: #77c0c9;
+  font-size: 25px;
+  line-height: 1;
+}
+.box blockquote p {
+  padding: 0;
+  margin: 10px 0;
+  line-height: 1.7;
+}
+.box blockquote cite {
+  display: block;
+  text-align: right;
+  color: #888888;
+  font-size: 0.9em;
+}

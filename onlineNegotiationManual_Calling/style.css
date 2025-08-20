@@ -1,0 +1,136 @@
+#anchor_inquiryForm {
+  display: none;
+}
+
+#your-browser img {
+  vertical-align: baseline;
+}
+
+.browser {
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
+  margin-top: 50px;
+}
+
+.browser h2 {
+  background-color: #f6f6f6;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-size: 25px;
+  margin-bottom: 0;
+  min-height: 32px;
+  padding: 10px;
+}
+
+.browser h2 img {
+  margin-right: 6px;
+  vertical-align: top;
+}
+
+.browser h2 span:last-child {
+  font-size: 12pt;
+}
+
+@media screen and (max-width: 480px) {
+  .browser h2 span {
+    display: block;
+    text-align: center;
+  }
+}
+
+.browser .dscription {
+  display: none;
+  padding: 15px 20px;
+}
+
+.browser .dscription>div {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .browser .dscription>div {
+    display: block;
+  }
+
+  .browser .dscription>div>p {
+    margin-top: 0;
+  }
+}
+
+.browser .dscription img {
+  border: 2px #3d4c48 solid;
+  height: auto;
+  width: 320px;
+}
+
+.browser .dscription>div>p {
+  flex: 1;
+  margin-left: 6px;
+}
+
+.browser .dscription .smartphone_app img {
+  border: none;
+  height: 100px;
+  width: auto;
+}
+
+@media screen and (max-width: 480px) {
+  .browser .dscription .smartphone_app>img {
+    display: none;
+  }
+}
+
+.browser .dscription .smartphone_app a {
+  text-decoration: none;
+}
+
+.calling {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.calling button {
+  background-color: #80a34a;
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  padding: 10px 25px 10px 20px;
+}
+
+.calling button:hover {
+  opacity: .7;
+}
+
+.alert {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  padding: 12px 20px;
+  position: relative;
+}
+
+.alert-primary {
+  color: #004085;
+  background-color: #cce5ff;
+  border-color: #b8daff;
+}
+
+.alert-secondary {
+  color: #383d41;
+  background-color: #e2e3e5;
+  border-color: #d6d8db;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.alert-warning {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}

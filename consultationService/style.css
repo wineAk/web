@@ -1,0 +1,297 @@
+@charset "utf-8";
+
+/* 全体 */
+html, table th, table td {
+  color: #2a2a2a;
+}
+
+article.resp>form {
+  overflow: visible;
+}
+
+article.resp .f_comb {
+  font-size: 12px;
+}
+
+.label_message {
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+/* 相談事例 */
+.consultation-example {
+  margin: 1em 0;
+  position: relative;
+  padding: 0.5em 1.5em;
+  border-top: solid 2px #aaa;
+  border-bottom: solid 2px #aaa;
+}
+
+.consultation-example:before,
+.consultation-example:after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  width: 2px;
+  height: -webkit-calc(100% + 20px);
+  height: calc(100% + 20px);
+  background-color: #aaa;
+}
+
+.consultation-example:before {
+  left: 10px;
+}
+
+.consultation-example:after {
+  right: 10px;
+}
+
+.consultation-example ul {
+  padding-left: 20px;
+}
+
+.more {
+  margin: 10px 0;
+}
+
+.more button {
+  display: inline-block;
+  padding: 0.3em 1em;
+  text-decoration: none;
+  color: #2a2a2a;
+  background: #fff;
+  border: solid 2px #2a2a2a;
+  border-radius: 3px;
+  transition: .4s;
+}
+
+.more button:hover,
+.more button:focus,
+.more button:active {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+.more button:focus {
+  outline: none;
+}
+
+[data-more="target"] {
+  display: none;
+}
+
+/* 申込み回数について */
+.number-applications {
+  padding: 0.5em 1em;
+  margin: 2em 0;
+  color: #2a2a2a;
+  background: rgba(123, 171, 79, 0.2);
+  border-left: solid 10px #7bab4f;
+}
+
+/* 項目タイトル */
+article.resp form li.clr label.col.span_3 {
+  width: 100%;
+  margin-bottom: 3px;
+}
+
+/* 項目内容 */
+article.resp form li.clr div.col.span_9 {
+  width: 100%;
+}
+
+/* 名前 */
+article.resp form li.clr[data-name] div.col.span_9,
+[data-name] .span_9 span {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+[data-name] .span_9 span {
+  margin-right: 20px;
+  font-size: 0;
+}
+
+@media screen and (max-width: 48em) {
+  article.resp form li.clr[data-name] div.col.span_9 {
+    display: inline-block;
+  }
+
+  [data-name] .span_9 span {
+    display: block;
+    margin-right: 0px;
+  }
+}
+
+/* ラベル */
+article.resp li.label {
+  padding-bottom: .5em;
+  border-bottom: 3px double #c5c5c5;
+  margin-bottom: .7em;
+  font-size: 1.3em;
+}
+
+/* 来社人数 */
+[data-people] input {
+  text-align: right;
+  width: 100px;
+  border: 1px solid #c5c5c5;
+  color: #333;
+  font-size: 16px;
+}
+
+/* 相談内容 */
+article.resp textarea {
+  display: block;
+  width: 100%;
+}
+
+[data-content] textarea {
+  height: 250px;
+}
+
+/* 相談日時1 */
+[data-loading="true"] {
+  position: relative;
+}
+
+article.resp form [data-date].clr,
+article.resp form [data-text].clr,
+[data-loading="false"] .loading-overlay,
+[data-loading-error="true"] .loading-overlay-now,
+[data-loading-error="false"] .loading-overlay-error {
+  display: none;
+}
+
+.loading-overlay, .loading-overlay-now, .loading-overlay-error {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: -10px;
+  right: -30px;
+  bottom: -20px;
+  left: -30px;
+  background: rgba(42, 42, 42, .5);
+  border-radius: 10px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.loading-overlay-now, .loading-overlay-error {
+  width: 200px;
+  height: 200px;
+  border-radius: 5px;
+  margin: 25px;
+  background: #e7e7e8;
+}
+
+.loading-overlay-now>div>div {
+  margin: 0 auto 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 4px solid #7bab4f;
+  border-right: 4px solid #e7e7e8;
+  animation: rotate 1s infinite linear;
+}
+
+.loading-overlay-error>div>div {
+  margin: 0 auto 20px;
+  width: 60px;
+  height: 60px;
+  position: relative;
+}
+
+.loading-overlay-error>div>div:before,
+.loading-overlay-error>div>div:after {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  content: "";
+  width: 100%;
+  border-top: 6px solid #c9242f;
+}
+
+.loading-overlay-error>div>div:before {
+  transform: rotate(45deg);
+}
+
+.loading-overlay-error>div>div:after {
+  transform: rotate(-45deg);
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-log {
+  padding: 0 10px;
+  font-size: 10px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
+/* 相談日時2 */
+article.resp input[type="radio"] {
+  margin-right: 0;
+}
+
+article.resp input[type="radio"]:disabled::before,
+article.resp input[type="radio"]:disabled::after {
+  -webkit-transition: -webkit-transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+  transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+  -webkit-transform: scale(1, 1);
+  transform: scale(1, 1);
+  position: absolute;
+  top: 8px;
+  left: 0;
+  content: "";
+  height: 0;
+  width: 100%;
+  border-top: 2px solid #d4d1cf;
+  border-radius: 0;
+  background: transparent;
+}
+
+article.resp .required+.input input[type="radio"]:disabled::before,
+article.resp .required+.input input[type="radio"]:disabled::after {
+  border-top: 2px solid #c9242f;
+}
+
+article.resp input[type="radio"]:disabled::before {
+  transform: rotate(45deg);
+}
+
+article.resp input[type="radio"]:disabled::after {
+  transform: rotate(-45deg);
+}
+
+[data-select] .f_comt {
+  display: inherit;
+  margin-right: 5px;
+}
+
+@media screen and (max-width: 48em) {
+  [data-select] .f_comt {
+    display: block;
+    margin-right: 0;
+  }
+}

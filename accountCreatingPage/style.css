@@ -1,0 +1,319 @@
+/************************************
+** 文字にライン（下線）を引くタグ
+** 本文　【<strong class="marker">強調します</strong>】
+** 注意文【<strong class="marker_c ">強調します</strong>】
+**
+************************************/
+.marker {
+  background-image: linear-gradient(transparent 60%, #feb5c9 50%);
+  font-weight: bold;
+  padding: 0 5px;
+}
+
+.marker_c {
+  background-image: linear-gradient(transparent 60%, rgba(254, 181, 201, 0.45) 50%);
+  padding: 0 1px;
+}
+
+/************************************
+** フォーム自体の調整
+**
+************************************/
+/* 各種非表示箇所 */
+.base-header,
+.base-footer,
+.mod-breadcrumbs,
+.wgt-form__head,
+.header,
+.mod-product,
+.footer,
+#pagetop {
+  display: none;
+}
+
+/* フォームタイトルのmargin調整 */
+.wgt-heading {
+  margin: 0;
+}
+
+/* フォームのpadding調整 */
+.wgt-form .wgt-form__body {
+  padding: 15px 30px;
+}
+
+/* フォームの横幅 */
+div.base-page {
+  margin: 0;
+  min-width: auto;
+}
+
+/* 注意文の文字サイズ */
+.label_message {
+  font-size: 14px;
+}
+
+/* ラベルのデザイン */
+article.resp li.label {
+  background-color: #f6f6f6;
+  border-left: 6px solid #cccccc;
+  font-size: 22px;
+  margin: 30px 0 15px 0;
+  padding: 0.5em 0.75em;
+}
+
+/************************************
+** パスワード発行
+**
+************************************/
+#password {
+  width: 400px;
+}
+
+#password table {
+  border: none;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+#password td {
+  border-bottom: none;
+  border-right: solid 1px #666666;
+  color: #666666;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+#password td:last-child {
+  border-right: none;
+}
+
+#password br {
+  display: none;
+}
+
+/************************************
+** 製品選択
+**
+************************************/
+#service br {
+  display: none;
+}
+
+#service {
+  margin-bottom: 30px;
+  text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+#service div {
+  border-radius: 4px;
+  box-shadow: 0 4px 4px #8e8e8e;
+  color: #ffffff;
+  display: inline-block;
+  font-size: 10px;
+  height: 30px;
+  line-height: 30px;
+  line-height: 28px;
+  margin: 10px;
+  outline: none;
+/* エフェクト */
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  -webkit-transition: none;
+          transition: none;
+  width: 65px;
+}
+
+#service div,
+#service div::before,
+#service div::after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-transition: all 0.3s;
+          transition: all 0.3s;
+}
+
+#service div::before,
+#service div::after {
+  content: '';
+  display: block;
+  position: absolute;
+  z-index: -1;
+}
+
+#service div:hover {
+  box-shadow: 0 4px 4px #8e8e8e;
+}
+
+#service div:active {
+  box-shadow: 0 1px 1px #8e8e8e;
+  top: 3px;
+}
+
+/************************************
+** アカウントリスト・製品リスト
+**
+************************************/
+.account-list,
+.service-list {
+  font-size: 0;
+  height: 40px;
+  position: relative;
+}
+
+article.resp form li.clr.account-list,
+article.resp form li.clr.service-list {
+  margin: 0;
+}
+
+article.resp form li.clr.service-list {
+  display: none;
+}
+
+article.resp form li.clr.account-list.sum-list,
+article.resp form li.clr.service-list.service-list-plan {
+  margin-bottom: 6px;
+  padding-bottom: 2px;
+}
+
+.account-list > *,
+.service-list > * {
+  background-color: rgba(255, 255, 255, 0.85);
+  bottom: 0;
+  position: absolute;
+  top: 0;
+}
+
+.account-list.sum-list > *,
+.service-list.service-list-plan > * {
+  bottom: 2px;
+}
+
+.account-list > label,
+.service-list > label {
+  left: 6px;
+}
+
+.account-list > div,
+.service-list > div {
+  right: 0;
+}
+
+article.resp form li.clr.account-list label.col.span_3,
+article.resp form li.clr.service-list label.col.span_3 {
+  padding: 5px 0 0 5px;
+  width: 250px;
+}
+
+article.resp form li.clr.account-list div.col.span_9,
+article.resp form li.clr.service-list div.col.span_9 {
+  padding: 5px 0 0;
+  width: calc(100% - 250px - 6px);
+}
+
+/* Worksだけちょっと特殊 */
+[data-service='works'].service-list.service-list-plan {
+  height: 65px;
+}
+
+[data-service='works'] .f_comb {
+  display: block;
+}
+
+/************************************
+** カラーリング
+** その他の色はJavaScript側で生成
+**
+************************************/
+[data-service] {
+  background-color: rgba(42, 42, 42, 1);
+}
+
+/************************************
+** 注意文
+**
+************************************/
+.alert_text {
+  background-color: #ffeffe;
+  background-image: url(https://wineak.github.io/sskc/wf/onlineNegotiationManual/alert.png);
+  background-position: 5px 5px;
+  background-repeat: no-repeat;
+  border: 1px solid #d4440d;
+  clear: both;
+  color: #c25338;
+  line-height: 1.5;
+  margin: 0 0 1em 0;
+  padding: 10px;
+}
+.alert_text span {
+  filter: progid: DXImageTransform.Microsoft.AlphaImageLoader(src='https://wineak.github.io/sskc/wf/onlineNegotiationManual/alert.png', sizingMethod='scale');
+  float: left;
+  height: 48px;
+  left: -5px;
+  position: relative;
+  text-indent: -9999px;
+  top: -5px;
+  visibility: hidden;
+  width: 48px;
+}
+
+/************************************
+** 細かい調整
+**
+************************************/
+p {
+  margin: 0;
+}
+
+article.resp div.col.span_9 em {
+  font-size: 12px;
+}
+
+article.resp .sum-list input[type='text'] {
+  background-color: transparent;
+  border: #ffffff;
+}
+
+#next_month {
+  font-size: 10px;
+}
+
+[data-service] .f_comb {
+  display: inline;
+}
+
+.display_none {
+  display: none;
+}
+[name='wf21845574027'] option:empty {
+  display: none;
+}
+
+header,
+#breadcrumb {
+  display: none;
+}
+
+#wrap {
+  padding: 0;
+}
+
+.second_mv {
+  margin: 0;
+}
+
+h3 {
+  margin: 1rem 0;
+}
