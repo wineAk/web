@@ -1,5 +1,5 @@
 (() => {
-  // toggleDisplay.ts
+  // src/index.ts
   jQuery.datepicker.setDefaults({
     onSelect: function(dateText, inst) {
       const input = inst && inst.input && inst.input.get(0);
@@ -153,7 +153,7 @@
     }
   }
   function getVersion() {
-    return "1.0.0";
+    return "{{VERSION}}";
   }
   if (typeof window !== "undefined") {
     window.toggleDisplay = toggleDisplay;

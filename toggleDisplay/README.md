@@ -8,7 +8,8 @@
 - ✅ ファイルアップロード、日付、数字、パスワード対応
 - ✅ 住所セット（都道府県・市区町村）対応
 - ✅ 必須項目の動的制御
-- ✅ バージョン管理機能
+- ✅ バージョン管理機能（ビルド時自動挿入）
+- ✅ 並列ビルド対応（開発用・本番用同時生成）
 
 ## 📦 インストール
 
@@ -19,16 +20,9 @@ npm install
 ## 🔧 開発
 
 ```bash
-# 開発用ビルド
+# 開発用・本番用ビルド（両方同時生成）
 npm run dev
-
-# 本番用ビルド
 npm run build
-
-# バージョン更新
-npm version patch  # 1.0.0 → 1.0.1
-npm version minor  # 1.0.0 → 1.1.0
-npm version major  # 1.0.0 → 2.0.0
 ```
 
 ## 💻 使い方
@@ -71,14 +65,15 @@ console.log(window.toggleDisplayVersion()); // "1.0.0"
 
 ```
 toggleDisplay/
-├── toggleDisplay.ts    # メインライブラリ
-├── constants.ts        # 定数定義
-├── utils.ts           # ユーティリティ関数
+├── src/
+│   ├── index.ts        # メインライブラリ
+│   ├── constants.ts    # 定数定義
+│   └── utils.ts        # ユーティリティ関数
 ├── scripts/
-│   └── update-version.js  # バージョン更新スクリプト
+│   └── build.js        # ビルドスクリプト（esbuild使用）
 ├── dist/
-│   ├── toggleDisplay.js      # 開発用ビルド
-│   └── toggleDisplay.min.js  # 本番用ビルド
+│   ├── td.js           # 開発用ビルド
+│   └── td.min.js       # 本番用ビルド
 └── package.json
 ```
 
@@ -94,6 +89,17 @@ toggleDisplay/
 | ファイル | `#file_view_` + ID | ファイルがアップロードされた時に対象を表示 |
 | 住所セット | `name`属性 + `-pf`/`-ct` | 都道府県・市区町村選択時に対象を表示 |
 
+## 🔧 技術仕様
+
+### ビルドシステム
+- **esbuild**: 高速なTypeScriptビルド
+- **並列ビルド**: 開発用・本番用を同時生成
+- **バージョン自動挿入**: ビルド時に`package.json`から取得
+
+### 出力ファイル
+- `dist/td.js`: 開発用（ソースマップ付き）
+- `dist/td.min.js`: 本番用（圧縮版）
+
 ## 🔍 トラブルシューティング
 
 ### よくある問題
@@ -106,8 +112,9 @@ toggleDisplay/
    - 住所セットの場合は `-pf`/`-ct` サフィックスを確認
    - 正規表現のエスケープを確認
 
-3. **バージョンエラー**
-   - `npm run version` を実行してバージョン情報を更新
+3. **ビルドエラー**
+   - `npm install` で依存関係を確認
+   - TypeScriptエラーを確認
 
 ## 📝 ライセンス
 

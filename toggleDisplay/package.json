@@ -4,8 +4,7 @@
   "description": "Toggle display functionality for form elements",
   "scripts": {
     "build": "node scripts/build.js",
-    "dev": "node scripts/build.js",
-    "version": "echo 'Version management is now handled during build'"
+    "dev": "node scripts/build.js"
   },
   "devDependencies": {
     "esbuild": "^0.25.9"

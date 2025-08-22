@@ -1,3 +1,5 @@
+import type { selectorElement, source, target, toggleDisplay } from "./type";
+
 // Datepickerで入力された際はinputイベントを発火させる
 // @ts-ignore
 jQuery.datepicker.setDefaults({
@@ -8,23 +10,6 @@ jQuery.datepicker.setDefaults({
     }
   },
 });
-
-type selectorElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | HTMLLIElement | null;
-
-type source = {
-  selector: string;
-  values?: string[];
-};
-
-type target = {
-  selector: string;
-  required?: boolean;
-};
-
-type toggleDisplay = {
-  source: source;
-  targets: target[];
-};
 
 // selectorからElementを取得する関数
 function getSelectorElement(selector: string): selectorElement {

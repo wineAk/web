@@ -19,7 +19,7 @@ const versionPlugin = {
     });
 
     // エントリーポイントの処理
-    build.onLoad({ filter: /toggleDisplay\.ts$/ }, async (args) => {
+    build.onLoad({ filter: /src\/index\.ts$/ }, async (args) => {
       let contents = await fs.promises.readFile(args.path, 'utf8');
       
       // プレースホルダーを実際のバージョンに置換
@@ -36,7 +36,6 @@ const versionPlugin = {
       if (result.errors.length === 0) {
         console.log(`✅ Build completed successfully!`);
         console.log(`📦 Version: v${version}`);
-        console.log(`📁 Output: dist/toggleDisplay${isMinify ? '.min' : ''}.js`);
       }
     });
   }
@@ -45,7 +44,7 @@ const versionPlugin = {
 // ビルド設定を生成する関数
 function createBuildOptions(isMinify, outfile) {
   return {
-    entryPoints: ['toggleDisplay.ts'],
+    entryPoints: ['src/index.ts'],
     bundle: true,
     platform: 'browser',
     format: 'iife',
@@ -73,11 +72,11 @@ async function build() {
     const builds = [
       {
         name: 'Development',
-        options: createBuildOptions(false, 'dist/toggleDisplay.js')
+        options: createBuildOptions(false, 'dist/td.js')
       },
       {
         name: 'Production',
-        options: createBuildOptions(true, 'dist/toggleDisplay.min.js')
+        options: createBuildOptions(true, 'dist/td.min.js')
       }
     ];
 
@@ -102,7 +101,7 @@ async function build() {
     if (successCount === builds.length) {
       console.log(`🎉 All builds completed successfully!`);
       console.log(`📦 Version: v${version}`);
-      console.log(`📁 Outputs: dist/toggleDisplay.js, dist/toggleDisplay.min.js`);
+      console.log(`📁 Outputs: dist/td.js, dist/td.min.js`);
     } else {
       console.error(`⚠️  ${builds.length - successCount} build(s) failed`);
       process.exit(1);
