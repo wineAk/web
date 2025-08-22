@@ -13,17 +13,28 @@ const args = process.argv.slice(2);
 const versionPlugin = {
   name: 'version-plugin',
   setup(build) {
+    console.log(`🔧 Plugin setup called`);
+    
     // ビルド開始時にバージョン情報を設定
     build.onStart(() => {
       console.log(`🚀 Building toggleDisplay v${version}...`);
     });
 
     // エントリーポイントの処理
-    build.onLoad({ filter: /src\/index\.ts$/ }, async (args) => {
+    build.onLoad({ filter: /index\.ts$/ }, async (args) => {
+      console.log(`🔍 Processing file: ${args.path}`);
       let contents = await fs.promises.readFile(args.path, 'utf8');
       
       // プレースホルダーを実際のバージョンに置換
+      const originalContent = contents;
       contents = contents.replace(/\{\{VERSION\}\}/g, version);
+      
+      if (originalContent !== contents) {
+        console.log(`🔧 Version replacement: {{VERSION}} → ${version}`);
+      } else {
+        console.log(`⚠️  No version placeholder found in ${args.path}`);
+        console.log(`📄 File contents preview:`, contents.substring(0, 200));
+      }
       
       return {
         contents,
