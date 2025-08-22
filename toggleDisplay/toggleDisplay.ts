@@ -44,7 +44,7 @@ function getSelectorElement(selector: string): selectorElement {
 function setTargetDisplay(targets: target[], isDisplay: boolean) {
   targets.forEach((target) => {
     const selector = target.selector;
-    const required = target.required;
+    const required = target.required && isDisplay; // 非表示の場合はrequiredを強制的にfalseにする
     const targetElm = getSelectorElement(selector);
     if (targetElm == null) {
       console.error("[toggleDisplay] ターゲットのセレクターが見つかりません", selector);
@@ -62,6 +62,24 @@ function setTargetDisplay(targets: target[], isDisplay: boolean) {
       return;
     }
     targetParentElm.style.display = isDisplay ? "" : "none";
+    // label.col.span_3に.requiredを追加
+    const labelElm = targetParentElm.querySelector("label.col.span_3") as HTMLLabelElement | null;
+    if (labelElm) {
+      labelElm.classList.toggle("required", required ?? false);
+    }
+    // 特定の要素のみ必須化
+    const requiredElm = targetParentElm.querySelector('[type="number"], [type="password"], [type="radio"], [type="text"], select, textarea') as HTMLInputElement | HTMLSelectElement | null;
+    if (requiredElm) {
+      requiredElm.required = required ?? false;
+    }
+    // チェックボックスのみ監視した必須化
+    const checkboxElms = Array.from(targetParentElm.querySelectorAll('[type="checkbox"]')) as HTMLInputElement[];
+    checkboxElms.forEach((element) => {
+      element.addEventListener("change", () => {
+        const isChecked = targetParentElm.querySelector('[type="checkbox"]:checked') !== null;
+        checkboxElms.forEach((elm) => elm.required = !isChecked);
+      });
+    });
   });
 }
 
@@ -117,16 +135,16 @@ export function toggleDisplay(object: toggleDisplay) {
   // ファイル
   else if (sourceTagName === "p" && /^file_view_/.test(sourceId)) {
     // 初期値
-    setTargetDisplay(targets, false)
+    setTargetDisplay(targets, false);
     // 監視
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        const { target, type } = mutation
-        const { firstElementChild } = target as HTMLElement
-        const isDisplay =  (type === "childList" && firstElementChild) ? true : false; 
-        setTargetDisplay(targets, isDisplay)
+        const { target, type } = mutation;
+        const { firstElementChild } = target as HTMLElement;
+        const isDisplay = type === "childList" && firstElementChild ? true : false;
+        setTargetDisplay(targets, isDisplay);
       });
-    })
+    });
     // 監視オプションの設定
     const config = { childList: true, subtree: true };
     observer.observe(sourceElement, config);

@@ -1,1 +1,144 @@
-(()=>{jQuery.datepicker.setDefaults({onSelect:function(i,e){let t=e&&e.input&&e.input.get(0);t&&t.dispatchEvent(new Event("input",{bubbles:!0}))}});function f(i){let e=document.querySelector(`[name="${i}"]`);if(e)return e;let t=document.querySelector(`#file_view_${i}`);if(t)return t;let n=document.querySelectorAll("li.label"),p=Array.from(n).filter(r=>r.innerText===i)[0];return p||null}function u(i,e){i.forEach(t=>{let n=t.selector,p=t.required,r=f(n);if(r==null){console.error("[toggleDisplay] \u30BF\u30FC\u30B2\u30C3\u30C8\u306E\u30BB\u30EC\u30AF\u30BF\u30FC\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093",n);return}if(r.className==="label"){r.style.display=e?"":"none";return}let g=r.closest("li.clr");if(g==null){console.error("[toggleDisplay] \u30BF\u30FC\u30B2\u30C3\u30C8\u306E\u89AA\u8981\u7D20\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093",n);return}g.style.display=e?"":"none"})}function y(i){let{source:e,targets:t}=i,n=f(e.selector);if(n==null){console.error("[toggleDisplay] \u30BD\u30FC\u30B9\u306E\u30BB\u30EC\u30AF\u30BF\u30FC\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093",e.selector);return}if(/wf\d+-(pf|ct)/.test(e.selector)){let o=e.selector.endsWith("-pf"),s=o?HTMLSelectElement.prototype:HTMLInputElement.prototype,l=Object.getOwnPropertyDescriptor(s,"value");l&&l.set&&Object.defineProperty(n,"value",{get(){return l.get?.call(this)},set(c){let a=l.get?.call(this);l.set?.call(this,c);let m=o?"change":"input";c!==a&&this.dispatchEvent(new Event(m,{bubbles:!0}))}})}let p=n.type,r=n.tagName.toLowerCase(),g=n.id;if(r==="select"){let o=e.values?e.values:[],s=new RegExp(`^(${o.join("|")})$`);u(t,s.test(String(n.value))),n.addEventListener("change",l=>{let c=l.target;u(t,c?s.test(c.value):!1)})}else if(r==="p"&&/^file_view_/.test(g)){u(t,!1);let o=new MutationObserver(l=>{l.forEach(c=>{let{target:a,type:m}=c,{firstElementChild:E}=a;u(t,!!(m==="childList"&&E))})}),s={childList:!0,subtree:!0};o.observe(n,s)}else if(p==="checkbox"){let o=e.values?e.values:[],s=new RegExp(`^(${o.join("|")})$`),l=()=>{let a=document.querySelectorAll(`[name=${e.selector}]:checked`),E=Array.from(a).map(d=>d.value).some(d=>s.test(d));u(t,E)};l(),document.querySelectorAll(`[name=${e.selector}]`).forEach(a=>{a.addEventListener("change",m=>{l()})})}else if(p==="radio"){let o=e.values?e.values:[],s=new RegExp(`^(${o.join("|")})$`),l=document.querySelector(`[name=${e.selector}]:checked`);u(t,l?s.test(l.value):!1),document.querySelectorAll(`[name=${e.selector}]`).forEach(a=>{a.addEventListener("change",m=>{let E=m.target;u(t,E?s.test(E.value):!1)})})}else u(t,String(n.value).length>0),n.addEventListener("input",o=>{let s=o.target;u(t,s?String(s.value).length>0:!1)})}typeof window<"u"&&(window.toggleDisplay=y);})();
+(() => {
+  // toggleDisplay.ts
+  jQuery.datepicker.setDefaults({
+    onSelect: function(dateText, inst) {
+      const input = inst && inst.input && inst.input.get(0);
+      if (input) {
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    }
+  });
+  function getSelectorElement(selector) {
+    const nameElm = document.querySelector(`[name="${selector}"]`);
+    if (nameElm) return nameElm;
+    const idElm = document.querySelector(`#file_view_${selector}`);
+    if (idElm) return idElm;
+    const labelElms = document.querySelectorAll("li.label");
+    const labelElm = Array.from(labelElms).filter((e) => e.innerText === selector)[0];
+    if (labelElm) return labelElm;
+    return null;
+  }
+  function setTargetDisplay(targets, isDisplay) {
+    targets.forEach((target) => {
+      const selector = target.selector;
+      const required = target.required && isDisplay;
+      const targetElm = getSelectorElement(selector);
+      if (targetElm == null) {
+        console.error("[toggleDisplay] \u30BF\u30FC\u30B2\u30C3\u30C8\u306E\u30BB\u30EC\u30AF\u30BF\u30FC\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093", selector);
+        return;
+      }
+      if (targetElm.className === "label") {
+        targetElm.style.display = isDisplay ? "" : "none";
+        return;
+      }
+      const targetParentElm = targetElm.closest("li.clr");
+      if (targetParentElm == null) {
+        console.error("[toggleDisplay] \u30BF\u30FC\u30B2\u30C3\u30C8\u306E\u89AA\u8981\u7D20\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093", selector);
+        return;
+      }
+      targetParentElm.style.display = isDisplay ? "" : "none";
+      const labelElm = targetParentElm.querySelector("label.col.span_3");
+      if (labelElm) {
+        labelElm.classList.toggle("required", required ?? false);
+      }
+      const requiredElm = targetParentElm.querySelector('[type="number"], [type="password"], [type="radio"], [type="text"], select, textarea');
+      if (requiredElm) {
+        requiredElm.required = required ?? false;
+      }
+      const checkboxElms = Array.from(targetParentElm.querySelectorAll('[type="checkbox"]'));
+      checkboxElms.forEach((element) => {
+        element.addEventListener("change", () => {
+          const isChecked = targetParentElm.querySelector('[type="checkbox"]:checked') !== null;
+          checkboxElms.forEach((elm) => elm.required = !isChecked);
+        });
+      });
+    });
+  }
+  function toggleDisplay(object) {
+    const { source, targets } = object;
+    const sourceElement = getSelectorElement(source.selector);
+    if (sourceElement == null) {
+      console.error("[toggleDisplay] \u30BD\u30FC\u30B9\u306E\u30BB\u30EC\u30AF\u30BF\u30FC\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093", source.selector);
+      return;
+    }
+    if (/wf\d+-(pf|ct)/.test(source.selector)) {
+      const isPf = source.selector.endsWith("-pf");
+      const proto = isPf ? HTMLSelectElement.prototype : HTMLInputElement.prototype;
+      const d = Object.getOwnPropertyDescriptor(proto, "value");
+      if (d && d.set) {
+        Object.defineProperty(sourceElement, "value", {
+          get() {
+            return d.get?.call(this);
+          },
+          set(v) {
+            const old = d.get?.call(this);
+            d.set?.call(this, v);
+            const event = isPf ? "change" : "input";
+            if (v !== old) this.dispatchEvent(new Event(event, { bubbles: true }));
+          }
+        });
+      }
+    }
+    const sourceType = sourceElement.type;
+    const sourceTagName = sourceElement.tagName.toLowerCase();
+    const sourceId = sourceElement.id;
+    if (sourceTagName === "select") {
+      const values = source.values ? source.values : [];
+      const regExp = new RegExp(`^(${values.join("|")})$`);
+      setTargetDisplay(targets, regExp.test(String(sourceElement.value)));
+      sourceElement.addEventListener("change", (event) => {
+        const eventElement = event.target;
+        setTargetDisplay(targets, eventElement ? regExp.test(eventElement.value) : false);
+      });
+    } else if (sourceTagName === "p" && /^file_view_/.test(sourceId)) {
+      setTargetDisplay(targets, false);
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          const { target, type } = mutation;
+          const { firstElementChild } = target;
+          const isDisplay = type === "childList" && firstElementChild ? true : false;
+          setTargetDisplay(targets, isDisplay);
+        });
+      });
+      const config = { childList: true, subtree: true };
+      observer.observe(sourceElement, config);
+    } else if (sourceType === "checkbox") {
+      const values = source.values ? source.values : [];
+      const regExp = new RegExp(`^(${values.join("|")})$`);
+      const setCheckedDisplay = () => {
+        const checkedElements = document.querySelectorAll(`[name=${source.selector}]:checked`);
+        const checkedValues = Array.from(checkedElements).map((element) => element.value);
+        const isDisplay = checkedValues.some((value) => regExp.test(value));
+        setTargetDisplay(targets, isDisplay);
+      };
+      setCheckedDisplay();
+      const sourceElements = document.querySelectorAll(`[name=${source.selector}]`);
+      sourceElements.forEach((element) => {
+        element.addEventListener("change", (event) => {
+          setCheckedDisplay();
+        });
+      });
+    } else if (sourceType === "radio") {
+      const values = source.values ? source.values : [];
+      const regExp = new RegExp(`^(${values.join("|")})$`);
+      const checkedElement = document.querySelector(`[name=${source.selector}]:checked`);
+      setTargetDisplay(targets, checkedElement ? regExp.test(checkedElement.value) : false);
+      const sourceElements = document.querySelectorAll(`[name=${source.selector}]`);
+      sourceElements.forEach((element) => {
+        element.addEventListener("change", (event) => {
+          const eventElement = event.target;
+          setTargetDisplay(targets, eventElement ? regExp.test(eventElement.value) : false);
+        });
+      });
+    } else {
+      setTargetDisplay(targets, String(sourceElement.value).length > 0);
+      sourceElement.addEventListener("input", (event) => {
+        const eventElement = event.target;
+        setTargetDisplay(targets, eventElement ? String(eventElement.value).length > 0 : false);
+      });
+    }
+  }
+  if (typeof window !== "undefined") {
+    window.toggleDisplay = toggleDisplay;
+  }
+})();

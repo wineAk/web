@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "esbuild toggleDisplay.ts --bundle --platform=browser --format=iife --minify --outfile=dist/toggleDisplay.js",
+    "build": "esbuild toggleDisplay.ts --bundle --platform=browser --format=iife --minify --outfile=dist/toggleDisplay.min.js",
     "dev": "esbuild toggleDisplay.ts --bundle --platform=browser --format=iife --outfile=dist/toggleDisplay.js"
   },
   "devDependencies": {
