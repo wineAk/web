@@ -174,7 +174,15 @@ export function toggleDisplay(object?: toggleDisplay) {
     });
     // 監視オプションの設定
     const config = { childList: true, subtree: true };
-    observer.observe(sourceElement, config);
+    observer.observe(sourceElement, config); 
+    // 要素が削除された時にobserverを破棄（メモリリーク防止）
+    const disconnectObserver = () => {
+      observer.disconnect();
+    };
+    // ページアンロード時にobserverを破棄
+    if (typeof window !== "undefined") {
+      window.addEventListener("beforeunload", disconnectObserver);
+    }
   }
   // チェックボックス
   else if (sourceType === "checkbox") {
@@ -192,9 +200,13 @@ export function toggleDisplay(object?: toggleDisplay) {
       // 入力イベント
       const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`) as NodeListOf<HTMLInputElement>;
       sourceElements.forEach((element) => {
-        element.addEventListener("change", (event) => {
+        // 既存のイベントリスナーを削除してから追加（重複防止）
+        element.removeEventListener("change", (element as any)._toggleDisplayChangeHandler);
+        // 新しいハンドラーを作成
+        (element as any)._toggleDisplayChangeHandler = () => {
           setCheckedDisplay();
-        });
+        };
+        element.addEventListener("change", (element as any)._toggleDisplayChangeHandler);
       });
     } else {
       // valuesが空の場合は常に非表示
@@ -212,10 +224,14 @@ export function toggleDisplay(object?: toggleDisplay) {
       // 入力イベント
       const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`) as NodeListOf<HTMLInputElement>;
       sourceElements.forEach((element) => {
-        element.addEventListener("change", (event) => {
+        // 既存のイベントリスナーを削除してから追加（重複防止）
+        element.removeEventListener("change", (element as any)._toggleDisplayChangeHandler);
+        // 新しいハンドラーを作成
+        (element as any)._toggleDisplayChangeHandler = (event: Event) => {
           const eventElement = event.target as HTMLInputElement | null;
           setTargetDisplay(targets, eventElement ? regExp.test(eventElement.value) : false);
-        });
+        };
+        element.addEventListener("change", (element as any)._toggleDisplayChangeHandler);
       });
     } else {
       // valuesが空の場合は常に非表示

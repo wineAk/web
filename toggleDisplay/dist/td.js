@@ -141,6 +141,12 @@
       });
       const config = { childList: true, subtree: true };
       observer.observe(sourceElement, config);
+      const disconnectObserver = () => {
+        observer.disconnect();
+      };
+      if (typeof window !== "undefined") {
+        window.addEventListener("beforeunload", disconnectObserver);
+      }
     } else if (sourceType === "checkbox") {
       const values = source.values ? source.values : [];
       if (values.length > 0) {
@@ -154,9 +160,11 @@
         setCheckedDisplay();
         const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`);
         sourceElements.forEach((element) => {
-          element.addEventListener("change", (event) => {
+          element.removeEventListener("change", element._toggleDisplayChangeHandler);
+          element._toggleDisplayChangeHandler = () => {
             setCheckedDisplay();
-          });
+          };
+          element.addEventListener("change", element._toggleDisplayChangeHandler);
         });
       } else {
         setTargetDisplay(targets, false);
@@ -169,10 +177,12 @@
         setTargetDisplay(targets, checkedElement ? regExp.test(checkedElement.value) : false);
         const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`);
         sourceElements.forEach((element) => {
-          element.addEventListener("change", (event) => {
+          element.removeEventListener("change", element._toggleDisplayChangeHandler);
+          element._toggleDisplayChangeHandler = (event) => {
             const eventElement = event.target;
             setTargetDisplay(targets, eventElement ? regExp.test(eventElement.value) : false);
-          });
+          };
+          element.addEventListener("change", element._toggleDisplayChangeHandler);
         });
       } else {
         setTargetDisplay(targets, false);
