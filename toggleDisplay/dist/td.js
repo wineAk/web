@@ -1,13 +1,15 @@
 (() => {
   // src/index.ts
-  jQuery.datepicker.setDefaults({
-    onSelect: function(dateText, inst) {
-      const input = inst && inst.input && inst.input.get(0);
-      if (input) {
-        input.dispatchEvent(new Event("input", { bubbles: true }));
+  if (typeof window.jQuery !== "undefined" && window.jQuery.datepicker) {
+    window.jQuery.datepicker.setDefaults({
+      onSelect: function(dateText, inst) {
+        const input = inst && inst.input && inst.input.get(0);
+        if (input) {
+          input.dispatchEvent(new Event("input", { bubbles: true }));
+        }
       }
-    }
-  });
+    });
+  }
   function getSelectorElement(selector) {
     const nameElm = document.querySelector(`[name="${selector}"]`);
     if (nameElm) return nameElm;
@@ -52,10 +54,12 @@
       }
       const checkboxElms = Array.from(targetParentElm.querySelectorAll('[type="checkbox"]'));
       checkboxElms.forEach((element) => {
-        element.addEventListener("change", () => {
+        element.removeEventListener("change", element._toggleDisplayChangeHandler);
+        element._toggleDisplayChangeHandler = () => {
           const isChecked = targetParentElm.querySelector('[type="checkbox"]:checked') !== null;
           checkboxElms.forEach((elm) => elm.required = !isChecked);
-        });
+        };
+        element.addEventListener("change", element._toggleDisplayChangeHandler);
       });
     });
   }
@@ -115,12 +119,16 @@
     const sourceId = sourceElement.id;
     if (sourceTagName === "select") {
       const values = source.values ? source.values : [];
-      const regExp = new RegExp(`^(${values.join("|")})$`);
-      setTargetDisplay(targets, regExp.test(String(sourceElement.value)));
-      sourceElement.addEventListener("change", (event) => {
-        const eventElement = event.target;
-        setTargetDisplay(targets, eventElement ? regExp.test(eventElement.value) : false);
-      });
+      if (values.length > 0) {
+        const regExp = new RegExp(`^(${values.join("|")})$`);
+        setTargetDisplay(targets, regExp.test(String(sourceElement.value)));
+        sourceElement.addEventListener("change", (event) => {
+          const eventElement = event.target;
+          setTargetDisplay(targets, eventElement ? regExp.test(eventElement.value) : false);
+        });
+      } else {
+        setTargetDisplay(targets, false);
+      }
     } else if (sourceTagName === "p" && /^file_view_/.test(sourceId)) {
       setTargetDisplay(targets, false);
       const observer = new MutationObserver((mutations) => {
@@ -135,32 +143,40 @@
       observer.observe(sourceElement, config);
     } else if (sourceType === "checkbox") {
       const values = source.values ? source.values : [];
-      const regExp = new RegExp(`^(${values.join("|")})$`);
-      const setCheckedDisplay = () => {
-        const checkedElements = document.querySelectorAll(`[name="${source.selector}"]:checked`);
-        const checkedValues = Array.from(checkedElements).map((element) => element.value);
-        const isDisplay = checkedValues.some((value) => regExp.test(value));
-        setTargetDisplay(targets, isDisplay);
-      };
-      setCheckedDisplay();
-      const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`);
-      sourceElements.forEach((element) => {
-        element.addEventListener("change", (event) => {
-          setCheckedDisplay();
+      if (values.length > 0) {
+        const regExp = new RegExp(`^(${values.join("|")})$`);
+        const setCheckedDisplay = () => {
+          const checkedElements = document.querySelectorAll(`[name="${source.selector}"]:checked`);
+          const checkedValues = Array.from(checkedElements).map((element) => element.value);
+          const isDisplay = checkedValues.some((value) => regExp.test(value));
+          setTargetDisplay(targets, isDisplay);
+        };
+        setCheckedDisplay();
+        const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`);
+        sourceElements.forEach((element) => {
+          element.addEventListener("change", (event) => {
+            setCheckedDisplay();
+          });
         });
-      });
+      } else {
+        setTargetDisplay(targets, false);
+      }
     } else if (sourceType === "radio") {
       const values = source.values ? source.values : [];
-      const regExp = new RegExp(`^(${values.join("|")})$`);
-      const checkedElement = document.querySelector(`[name="${source.selector}"]:checked`);
-      setTargetDisplay(targets, checkedElement ? regExp.test(checkedElement.value) : false);
-      const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`);
-      sourceElements.forEach((element) => {
-        element.addEventListener("change", (event) => {
-          const eventElement = event.target;
-          setTargetDisplay(targets, eventElement ? regExp.test(eventElement.value) : false);
+      if (values.length > 0) {
+        const regExp = new RegExp(`^(${values.join("|")})$`);
+        const checkedElement = document.querySelector(`[name="${source.selector}"]:checked`);
+        setTargetDisplay(targets, checkedElement ? regExp.test(checkedElement.value) : false);
+        const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`);
+        sourceElements.forEach((element) => {
+          element.addEventListener("change", (event) => {
+            const eventElement = event.target;
+            setTargetDisplay(targets, eventElement ? regExp.test(eventElement.value) : false);
+          });
         });
-      });
+      } else {
+        setTargetDisplay(targets, false);
+      }
     } else {
       setTargetDisplay(targets, String(sourceElement.value).length > 0);
       sourceElement.addEventListener("input", (event) => {

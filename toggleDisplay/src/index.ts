@@ -2,14 +2,16 @@ import type { selectorElement, source, target, toggleDisplay } from "./type";
 
 // Datepickerで入力された際はinputイベントを発火させる
 // @ts-ignore
-jQuery.datepicker.setDefaults({
-  onSelect: function (dateText, inst) {
-    const input = inst && inst.input && inst.input.get(0);
-    if (input) {
-      input.dispatchEvent(new Event("input", { bubbles: true }));
-    }
-  },
-});
+if (typeof (window as any).jQuery !== "undefined" && (window as any).jQuery.datepicker) {
+  (window as any).jQuery.datepicker.setDefaults({
+    onSelect: function (dateText, inst) {
+      const input = inst && inst.input && inst.input.get(0);
+      if (input) {
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    },
+  });
+}
 
 // selectorからElementを取得する関数
 function getSelectorElement(selector: string): selectorElement {
@@ -20,7 +22,7 @@ function getSelectorElement(selector: string): selectorElement {
   if (idElm) return idElm as HTMLInputElement;
   // グループラベルは完全一致で調査
   const labelElms = document.querySelectorAll("li.label") as NodeListOf<HTMLLIElement>;
-  const labelRegExp = new RegExp(`^${selector}$`);
+  const labelRegExp = new RegExp(`^${selector}$`); // 正規表現を許可する
   const labelElm = Array.from(labelElms).filter((e) => labelRegExp.test(e.innerText))[0];
   if (labelElm) return labelElm;
   return null;
@@ -64,11 +66,16 @@ function setTargetDisplay(targets: target[], isDisplay: boolean) {
     }
     // チェックボックスのみ監視した必須化
     const checkboxElms = Array.from(targetParentElm.querySelectorAll('[type="checkbox"]')) as HTMLInputElement[];
+    // 既存のイベントリスナーを削除してから追加（重複防止）
     checkboxElms.forEach((element) => {
-      element.addEventListener("change", () => {
+      // 同じ関数のリスナーを削除
+      element.removeEventListener("change", (element as any)._toggleDisplayChangeHandler);
+      // 新しいハンドラーを作成
+      (element as any)._toggleDisplayChangeHandler = () => {
         const isChecked = targetParentElm.querySelector('[type="checkbox"]:checked') !== null;
-        checkboxElms.forEach((elm) => elm.required = !isChecked);
-      });
+        checkboxElms.forEach((elm) => (elm.required = !isChecked));
+      };
+      element.addEventListener("change", (element as any)._toggleDisplayChangeHandler);
     });
   });
 }
@@ -138,14 +145,19 @@ export function toggleDisplay(object?: toggleDisplay) {
   // プルダウン
   if (sourceTagName === "select") {
     const values = source.values ? source.values : [];
-    const regExp = new RegExp(`^(${values.join("|")})$`);
-    // 初期値
-    setTargetDisplay(targets, regExp.test(String(sourceElement.value)));
-    // 入力イベント
-    sourceElement.addEventListener("change", (event) => {
-      const eventElement = event.target as HTMLSelectElement | null;
-      setTargetDisplay(targets, eventElement ? regExp.test(eventElement.value) : false);
-    });
+    if (values.length > 0) {
+      const regExp = new RegExp(`^(${values.join("|")})$`); // 正規表現を許可する
+      // 初期値
+      setTargetDisplay(targets, regExp.test(String(sourceElement.value)));
+      // 入力イベント
+      sourceElement.addEventListener("change", (event) => {
+        const eventElement = event.target as HTMLSelectElement | null;
+        setTargetDisplay(targets, eventElement ? regExp.test(eventElement.value) : false);
+      });
+    } else {
+      // valuesが空の場合は常に非表示
+      setTargetDisplay(targets, false);
+    }
   }
   // ファイル
   else if (sourceTagName === "p" && /^file_view_/.test(sourceId)) {
@@ -167,38 +179,48 @@ export function toggleDisplay(object?: toggleDisplay) {
   // チェックボックス
   else if (sourceType === "checkbox") {
     const values = source.values ? source.values : [];
-    const regExp = new RegExp(`^(${values.join("|")})$`);
-    const setCheckedDisplay = () => {
-      const checkedElements = document.querySelectorAll(`[name="${source.selector}"]:checked`) as NodeListOf<HTMLInputElement>;
-      const checkedValues = Array.from(checkedElements).map((element) => element.value);
-      const isDisplay = checkedValues.some((value) => regExp.test(value));
-      setTargetDisplay(targets, isDisplay);
-    };
-    // 初期値
-    setCheckedDisplay();
-    // 入力イベント
-    const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`) as NodeListOf<HTMLInputElement>;
-    sourceElements.forEach((element) => {
-      element.addEventListener("change", (event) => {
-        setCheckedDisplay();
+    if (values.length > 0) {
+      const regExp = new RegExp(`^(${values.join("|")})$`); // 正規表現を許可する
+      const setCheckedDisplay = () => {
+        const checkedElements = document.querySelectorAll(`[name="${source.selector}"]:checked`) as NodeListOf<HTMLInputElement>;
+        const checkedValues = Array.from(checkedElements).map((element) => element.value);
+        const isDisplay = checkedValues.some((value) => regExp.test(value));
+        setTargetDisplay(targets, isDisplay);
+      };
+      // 初期値
+      setCheckedDisplay();
+      // 入力イベント
+      const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`) as NodeListOf<HTMLInputElement>;
+      sourceElements.forEach((element) => {
+        element.addEventListener("change", (event) => {
+          setCheckedDisplay();
+        });
       });
-    });
+    } else {
+      // valuesが空の場合は常に非表示
+      setTargetDisplay(targets, false);
+    }
   }
   // ラジオボタン
   else if (sourceType === "radio") {
     const values = source.values ? source.values : [];
-    const regExp = new RegExp(`^(${values.join("|")})$`);
-    // 初期値
-    const checkedElement = document.querySelector(`[name="${source.selector}"]:checked`) as HTMLInputElement | null;
-    setTargetDisplay(targets, checkedElement ? regExp.test(checkedElement.value) : false);
-    // 入力イベント
-    const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`) as NodeListOf<HTMLInputElement>;
-    sourceElements.forEach((element) => {
-      element.addEventListener("change", (event) => {
-        const eventElement = event.target as HTMLInputElement | null;
-        setTargetDisplay(targets, eventElement ? regExp.test(eventElement.value) : false);
+    if (values.length > 0) {
+      const regExp = new RegExp(`^(${values.join("|")})$`); // 正規表現を許可する
+      // 初期値
+      const checkedElement = document.querySelector(`[name="${source.selector}"]:checked`) as HTMLInputElement | null;
+      setTargetDisplay(targets, checkedElement ? regExp.test(checkedElement.value) : false);
+      // 入力イベント
+      const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`) as NodeListOf<HTMLInputElement>;
+      sourceElements.forEach((element) => {
+        element.addEventListener("change", (event) => {
+          const eventElement = event.target as HTMLInputElement | null;
+          setTargetDisplay(targets, eventElement ? regExp.test(eventElement.value) : false);
+        });
       });
-    });
+    } else {
+      // valuesが空の場合は常に非表示
+      setTargetDisplay(targets, false);
+    }
   }
   // 一行テキスト
   else {
