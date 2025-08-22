@@ -27,6 +27,24 @@ npm run build
 
 ## 💻 使い方
 
+```
+toggleDisplayVersion(); // 1.0.0
+```
+
+```type
+toggleDisplay({
+  source: {
+    selector: string,
+  },
+  targets: [
+    {
+      selector: string
+      required: boolean
+    },
+  ],
+});
+```
+
 ### 基本的な使い方
 
 ```javascript

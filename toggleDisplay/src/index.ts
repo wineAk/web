@@ -30,9 +30,13 @@ function setTargetDisplay(targets: target[], isDisplay: boolean) {
   targets.forEach((target) => {
     const selector = target.selector;
     const required = target.required && isDisplay; // 非表示の場合はrequiredを強制的にfalseにする
+    if (!selector) {
+      console.error("[toggleDisplay] targetsのselectorは必須です", target);
+      return;
+    }
     const targetElm = getSelectorElement(selector);
     if (targetElm == null) {
-      console.error("[toggleDisplay] ターゲットのセレクターが見つかりません", selector);
+      console.error("[toggleDisplay] targetsのselector要素が見つかりません", target);
       return;
     }
     // グループラベルはtargetElmを表示・非表示
@@ -43,7 +47,7 @@ function setTargetDisplay(targets: target[], isDisplay: boolean) {
     // targetElmの親要素を取得して表示・非表示
     const targetParentElm = targetElm.closest("li.clr") as HTMLLIElement;
     if (targetParentElm == null) {
-      console.error("[toggleDisplay] ターゲットの親要素が見つかりません", selector);
+      console.error("[toggleDisplay] targetsの親要素が見つかりません", target);
       return;
     }
     targetParentElm.style.display = isDisplay ? "" : "none";
@@ -69,22 +73,31 @@ function setTargetDisplay(targets: target[], isDisplay: boolean) {
 }
 
 // 表示・非表示の切り替え関数
-export function toggleDisplay(object: toggleDisplay) {
+export function toggleDisplay(object?: toggleDisplay) {
+  if (!object) {
+    console.error("[toggleDisplay] 引数は必須です");
+    return;
+  }
   const { source, targets } = object;
-  
-  // バリデーション
-  if (!source || !source.selector) {
-    console.error("[toggleDisplay] ソースの設定が不正です");
+  if (!source) {
+    console.error("[toggleDisplay] sourceは必須です", object);
+    return;
+  }
+  if (!source.selector) {
+    console.error("[toggleDisplay] sourceのselectorは必須です", object);
     return;
   }
   if (!targets || !Array.isArray(targets) || targets.length === 0) {
-    console.error("[toggleDisplay] ターゲットの設定が不正です");
+    console.error("[toggleDisplay] targetsは必須です", object);
     return;
   }
-  
+  if (targets.some((target) => !target.selector)) {
+    console.error("[toggleDisplay] targetsのselectorは必須です", object);
+    return;
+  }
   const sourceElement = getSelectorElement(source.selector);
   if (sourceElement == null) {
-    console.error("[toggleDisplay] ソースのセレクターが見つかりません", source.selector);
+    console.error("[toggleDisplay] sourceのselector要素が見つかりません", object);
     return;
   }
   // 住所セットの「都道府県 -pf 」と「市区町村 -ct 」のみ、プログラム変更後にイベントを強制発火する
