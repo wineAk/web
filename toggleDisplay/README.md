@@ -11,13 +11,15 @@
 - ✅ バージョン管理機能（ビルド時自動挿入）
 - ✅ 並列ビルド対応（開発用・本番用同時生成）
 
-## 📦 インストール
+## 🔧 開発
+
+### 📦 インストール
 
 ```bash
 npm install
 ```
 
-## 🔧 開発
+### ビルド
 
 ```bash
 # 開発用・本番用ビルド（両方同時生成）
@@ -27,10 +29,21 @@ npm run build
 
 ## 💻 使い方
 
-```
-toggleDisplayVersion(); // 1.0.0
+### CDN
+
+``` html
+<script src="https://wineak.github.io/web/toggleDisplay/dist/td.min.js"></script>
 ```
 
+### 使い方
+
+#### バージョン取得
+
+```javascript
+console.log( toggleDisplayVersion() ); // "1.0.0"
+```
+
+#### 基本的な使い方
 ```type
 toggleDisplay({
   source: {
@@ -45,7 +58,7 @@ toggleDisplay({
 });
 ```
 
-### 基本的な使い方
+#### 実際の使い方
 
 ```javascript
 // 一行テキスト
@@ -72,29 +85,6 @@ toggleDisplay({
 });
 ```
 
-### バージョン確認
-
-```javascript
-// ブラウザでバージョン確認
-console.log(window.toggleDisplayVersion()); // "1.0.0"
-```
-
-## 📁 ファイル構成
-
-```
-toggleDisplay/
-├── src/
-│   ├── index.ts        # メインライブラリ
-│   ├── constants.ts    # 定数定義
-│   └── utils.ts        # ユーティリティ関数
-├── scripts/
-│   └── build.js        # ビルドスクリプト（esbuild使用）
-├── dist/
-│   ├── td.js           # 開発用ビルド
-│   └── td.min.js       # 本番用ビルド
-└── package.json
-```
-
 ## 🛠️ 対応要素
 
 | 要素タイプ | セレクター | 説明 |
@@ -106,17 +96,6 @@ toggleDisplay/
 | プルダウン | `name`属性 + `values` | 指定値が選択された時に対象を表示 |
 | ファイル | `#file_view_` + ID | ファイルがアップロードされた時に対象を表示 |
 | 住所セット | `name`属性 + `-pf`/`-ct` | 都道府県・市区町村選択時に対象を表示 |
-
-## 🔧 技術仕様
-
-### ビルドシステム
-- **esbuild**: 高速なTypeScriptビルド
-- **並列ビルド**: 開発用・本番用を同時生成
-- **バージョン自動挿入**: ビルド時に`package.json`から取得
-
-### 出力ファイル
-- `dist/td.js`: 開発用（ソースマップ付き）
-- `dist/td.min.js`: 本番用（圧縮版）
 
 ## 🔍 トラブルシューティング
 
