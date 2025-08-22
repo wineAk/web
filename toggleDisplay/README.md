@@ -11,15 +11,13 @@
 - ✅ バージョン管理機能（ビルド時自動挿入）
 - ✅ 並列ビルド対応（開発用・本番用同時生成）
 
-## 🔧 開発
-
-### 📦 インストール
+## 📦 インストール
 
 ```bash
 npm install
 ```
 
-### ビルド
+## 🔧 開発
 
 ```bash
 # 開発用・本番用ビルド（両方同時生成）
@@ -31,58 +29,80 @@ npm run build
 
 ### CDN
 
-``` html
+```html
 <script src="https://wineak.github.io/web/toggleDisplay/dist/td.min.js"></script>
 ```
 
-### 使い方
+### 基本的な使い方
 
-#### バージョン取得
-
-```javascript
-console.log( toggleDisplayVersion() ); // "1.0.0"
-```
-
-#### 基本的な使い方
-```type
-toggleDisplay({
-  source: {
-    selector: string,
-  },
-  targets: [
-    {
-      selector: string
-      required: boolean
+```html
+<script>
+addEventListener('pageshow', () => {
+  // 一行テキスト
+  toggleDisplay({
+    source: {
+      selector: "wf12345678001", // トリガーとなる要素の「name属性」
     },
-  ],
+    targets: [
+      {
+        selector: "一行テキストに入力があったら表示" //  表示の対象となるグループラベルの「項目名称」
+      },
+      {
+        selector: "wf12345678002", // 表示の対象となる要素の「name属性」
+        required: true // 表示の対象を必須にするなら「true」を設定
+      }
+    ],
+  });
+  // 複数行テキスト
+  toggleDisplay({
+    source: {
+      selector: "wf12345678003",
+    },
+    targets: [
+      {
+        selector: "複数行テキストに.*表示" // グループラベルの「項目名称」は正規表現も可能
+      },
+      {
+        selector: "wf12345678004",
+        required: false // 表示の対象を必須にしないなら「false」を設定
+      }
+    ],
+  });
+  // チェックボックス
+  toggleDisplay({
+    source: {
+      selector: "wf12345678010",
+      values: ["A", "B"], // 「選択項目」は完全一致で判定
+    },
+    targets: [
+      {
+        selector: "wf12345678011"
+        // `required` を省略した場合は `required: false` と同じ設定となる
+      }
+    ],
+  });
+  // プルダウン
+  toggleDisplay({
+    source: {
+      selector: "wf12345678012",
+      values: [".*[都道府]"], // 「選択項目」は正規表現も可能
+    },
+    targets: [
+      // 表示の対象は複数指定も可能
+      { selector: "wf12345678013" },
+      { selector: "wf12345678014" },
+      { selector: "wf12345678015" }
+    ],
+  });
 });
+</script>
 ```
 
-#### 実際の使い方
+### バージョン確認
 
 ```javascript
-// 一行テキスト
-toggleDisplay({
-  source: {
-    selector: "wf123456789",
-  },
-  targets: [
-    { selector: "表示したい要素" },
-    { selector: "wf987654321", required: true }
-  ],
-});
-
-// チェックボックス
-toggleDisplay({
-  source: {
-    selector: "wf123456789",
-    values: ["A", "B"],
-  },
-  targets: [
-    { selector: "チェックされた時表示" },
-    { selector: "wf987654321", required: false }
-  ],
-});
+// ブラウザでバージョン確認
+console.log(window.toggleDisplayVersion()); // "1.0.0"
 ```
 
 ## 🛠️ 対応要素

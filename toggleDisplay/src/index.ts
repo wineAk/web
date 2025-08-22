@@ -20,7 +20,8 @@ function getSelectorElement(selector: string): selectorElement {
   if (idElm) return idElm as HTMLInputElement;
   // グループラベルは完全一致で調査
   const labelElms = document.querySelectorAll("li.label") as NodeListOf<HTMLLIElement>;
-  const labelElm = Array.from(labelElms).filter((e) => e.innerText === selector)[0];
+  const labelRegExp = new RegExp(`^${selector}$`);
+  const labelElm = Array.from(labelElms).filter((e) => labelRegExp.test(e.innerText))[0];
   if (labelElm) return labelElm;
   return null;
 }
@@ -168,7 +169,7 @@ export function toggleDisplay(object?: toggleDisplay) {
     const values = source.values ? source.values : [];
     const regExp = new RegExp(`^(${values.join("|")})$`);
     const setCheckedDisplay = () => {
-      const checkedElements = document.querySelectorAll(`[name=${source.selector}]:checked`) as NodeListOf<HTMLInputElement>;
+      const checkedElements = document.querySelectorAll(`[name="${source.selector}"]:checked`) as NodeListOf<HTMLInputElement>;
       const checkedValues = Array.from(checkedElements).map((element) => element.value);
       const isDisplay = checkedValues.some((value) => regExp.test(value));
       setTargetDisplay(targets, isDisplay);
@@ -176,7 +177,7 @@ export function toggleDisplay(object?: toggleDisplay) {
     // 初期値
     setCheckedDisplay();
     // 入力イベント
-    const sourceElements = document.querySelectorAll(`[name=${source.selector}]`) as NodeListOf<HTMLInputElement>;
+    const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`) as NodeListOf<HTMLInputElement>;
     sourceElements.forEach((element) => {
       element.addEventListener("change", (event) => {
         setCheckedDisplay();
@@ -188,10 +189,10 @@ export function toggleDisplay(object?: toggleDisplay) {
     const values = source.values ? source.values : [];
     const regExp = new RegExp(`^(${values.join("|")})$`);
     // 初期値
-    const checkedElement = document.querySelector(`[name=${source.selector}]:checked`) as HTMLInputElement | null;
+    const checkedElement = document.querySelector(`[name="${source.selector}"]:checked`) as HTMLInputElement | null;
     setTargetDisplay(targets, checkedElement ? regExp.test(checkedElement.value) : false);
     // 入力イベント
-    const sourceElements = document.querySelectorAll(`[name=${source.selector}]`) as NodeListOf<HTMLInputElement>;
+    const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`) as NodeListOf<HTMLInputElement>;
     sourceElements.forEach((element) => {
       element.addEventListener("change", (event) => {
         const eventElement = event.target as HTMLInputElement | null;
@@ -221,120 +222,3 @@ if (typeof window !== "undefined") {
   (window as any).toggleDisplay = toggleDisplay;
   (window as any).toggleDisplayVersion = getVersion;
 }
-
-/*
-// 一行テキスト
-toggleDisplay({
-  source: {
-    selector: "wf23546447001",
-  },
-  targets: [
-    { selector: "一行" },
-    { selector: "wf23546447002", required: false }
-  ],
-});
-// 複数行テキスト
-toggleDisplay({
-  source: {
-    selector: "wf23546447003",
-  },
-  targets: [
-    { selector: "複数行" },
-    { selector: "wf23546447004", required: false }
-  ],
-});
-// チェックボックス
-toggleDisplay({
-  source: {
-    selector: "wf23546447005",
-    values: ["B", "C"],
-  },
-  targets: [
-    { selector: "チェック" },
-    { selector: "wf23546447006", required: false }
-  ],
-});
-// ラジオボタン
-toggleDisplay({
-  source: {
-    selector: "wf23546447007",
-    values: ["B", "C"],
-  },
-  targets: [
-    { selector: "ラジオ" },
-    { selector: "wf23546447008", required: false }
-  ],
-});
-// プルダウン
-toggleDisplay({
-  source: {
-    selector: "wf23546447009",
-    values: ["B", "C"],
-  },
-  targets: [
-    { selector: "プル" },
-    { selector: "wf23546447010", required: false }
-  ],
-});
-// 日付
-toggleDisplay({
-  source: {
-    selector: "wf23546447011",
-  },
-  targets: [
-    { selector: "日付" },
-    { selector: "wf23546447012", required: false }
-  ],
-});
-// 数字
-toggleDisplay({
-  source: {
-    selector: "wf23546447013",
-  },
-  targets: [
-    { selector: "数字" },
-    { selector: "wf23546447014", required: false }
-  ],
-});
-// ファイル
-toggleDisplay({
-  source: {
-    selector: "wf23546447015",
-  },
-  targets: [
-    { selector: "ファイル" },
-    { selector: "wf23546447016", required: false }
-  ],
-});
-// 住所セット（都道府県）
-toggleDisplay({
-  source: {
-    selector: "wf23546447017-pf",
-    values: [".*[都道府]"],
-  },
-  targets: [
-    { selector: "住所" },
-    { selector: "wf23546447018-pf", required: false }
-  ],
-});
-// 住所セット（市区町村）
-//toggleDisplay({
-//  source: {
-//    selector: "wf23546447017-ct",
-//  },
-//  targets: [
-//    { selector: "住所" },
-//    { selector: "wf23546447018-ct", required: false }
-//  ],
-//});
-// パスワード
-toggleDisplay({
-  source: {
-    selector: "wf23546447019",
-  },
-  targets: [
-    { selector: "パス" },
-    { selector: "wf23546447020", required: false }
-  ],
-});
-*/

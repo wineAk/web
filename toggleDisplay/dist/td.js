@@ -14,7 +14,8 @@
     const idElm = document.querySelector(`#file_view_${selector}`);
     if (idElm) return idElm;
     const labelElms = document.querySelectorAll("li.label");
-    const labelElm = Array.from(labelElms).filter((e) => e.innerText === selector)[0];
+    const labelRegExp = new RegExp(`^${selector}$`);
+    const labelElm = Array.from(labelElms).filter((e) => labelRegExp.test(e.innerText))[0];
     if (labelElm) return labelElm;
     return null;
   }
@@ -136,13 +137,13 @@
       const values = source.values ? source.values : [];
       const regExp = new RegExp(`^(${values.join("|")})$`);
       const setCheckedDisplay = () => {
-        const checkedElements = document.querySelectorAll(`[name=${source.selector}]:checked`);
+        const checkedElements = document.querySelectorAll(`[name="${source.selector}"]:checked`);
         const checkedValues = Array.from(checkedElements).map((element) => element.value);
         const isDisplay = checkedValues.some((value) => regExp.test(value));
         setTargetDisplay(targets, isDisplay);
       };
       setCheckedDisplay();
-      const sourceElements = document.querySelectorAll(`[name=${source.selector}]`);
+      const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`);
       sourceElements.forEach((element) => {
         element.addEventListener("change", (event) => {
           setCheckedDisplay();
@@ -151,9 +152,9 @@
     } else if (sourceType === "radio") {
       const values = source.values ? source.values : [];
       const regExp = new RegExp(`^(${values.join("|")})$`);
-      const checkedElement = document.querySelector(`[name=${source.selector}]:checked`);
+      const checkedElement = document.querySelector(`[name="${source.selector}"]:checked`);
       setTargetDisplay(targets, checkedElement ? regExp.test(checkedElement.value) : false);
-      const sourceElements = document.querySelectorAll(`[name=${source.selector}]`);
+      const sourceElements = document.querySelectorAll(`[name="${source.selector}"]`);
       sourceElements.forEach((element) => {
         element.addEventListener("change", (event) => {
           const eventElement = event.target;
