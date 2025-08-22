@@ -93,6 +93,11 @@ export function toggleDisplay(object: toggleDisplay) {
   }
   // 住所セットの「都道府県 -pf 」と「市区町村 -ct 」のみ、プログラム変更後にイベントを強制発火する
   if (/wf\d+-(pf|ct)/.test(source.selector)) {
+    // 既にvalueプロパティが再定義済みなら処理しない
+    const descriptor = Object.getOwnPropertyDescriptor(sourceElement, "value");
+    if (descriptor && descriptor.configurable === false) {
+      return;
+    }
     // suffix に応じて prototype を切り替え
     const isPf = source.selector.endsWith("-pf");
     const proto = isPf ? HTMLSelectElement.prototype : HTMLInputElement.prototype;
