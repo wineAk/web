@@ -1,7 +1,11 @@
 {
+  "name": "toggle-display",
+  "version": "1.0.0",
+  "description": "Toggle display functionality for form elements",
   "scripts": {
-    "build": "esbuild toggleDisplay.ts --bundle --platform=browser --format=iife --minify --outfile=dist/toggleDisplay.min.js",
-    "dev": "esbuild toggleDisplay.ts --bundle --platform=browser --format=iife --outfile=dist/toggleDisplay.js"
+    "build": "node scripts/build.js",
+    "dev": "node scripts/build.js",
+    "version": "echo 'Version management is now handled during build'"
   },
   "devDependencies": {
     "esbuild": "^0.25.9"

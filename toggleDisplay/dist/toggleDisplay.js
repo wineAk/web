@@ -39,11 +39,11 @@
       targetParentElm.style.display = isDisplay ? "" : "none";
       const labelElm = targetParentElm.querySelector("label.col.span_3");
       if (labelElm) {
-        labelElm.classList.toggle("required", required ?? false);
+        labelElm.classList.toggle("required", required != null ? required : false);
       }
       const requiredElm = targetParentElm.querySelector('[type="number"], [type="password"], [type="radio"], [type="text"], select, textarea');
       if (requiredElm) {
-        requiredElm.required = required ?? false;
+        requiredElm.required = required != null ? required : false;
       }
       const checkboxElms = Array.from(targetParentElm.querySelectorAll('[type="checkbox"]'));
       checkboxElms.forEach((element) => {
@@ -56,23 +56,37 @@
   }
   function toggleDisplay(object) {
     const { source, targets } = object;
+    if (!source || !source.selector) {
+      console.error("[toggleDisplay] \u30BD\u30FC\u30B9\u306E\u8A2D\u5B9A\u304C\u4E0D\u6B63\u3067\u3059");
+      return;
+    }
+    if (!targets || !Array.isArray(targets) || targets.length === 0) {
+      console.error("[toggleDisplay] \u30BF\u30FC\u30B2\u30C3\u30C8\u306E\u8A2D\u5B9A\u304C\u4E0D\u6B63\u3067\u3059");
+      return;
+    }
     const sourceElement = getSelectorElement(source.selector);
     if (sourceElement == null) {
       console.error("[toggleDisplay] \u30BD\u30FC\u30B9\u306E\u30BB\u30EC\u30AF\u30BF\u30FC\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093", source.selector);
       return;
     }
     if (/wf\d+-(pf|ct)/.test(source.selector)) {
+      const descriptor = Object.getOwnPropertyDescriptor(sourceElement, "value");
+      if (descriptor && descriptor.configurable === false) {
+        return;
+      }
       const isPf = source.selector.endsWith("-pf");
       const proto = isPf ? HTMLSelectElement.prototype : HTMLInputElement.prototype;
       const d = Object.getOwnPropertyDescriptor(proto, "value");
       if (d && d.set) {
         Object.defineProperty(sourceElement, "value", {
           get() {
-            return d.get?.call(this);
+            var _a;
+            return (_a = d.get) == null ? void 0 : _a.call(this);
           },
           set(v) {
-            const old = d.get?.call(this);
-            d.set?.call(this, v);
+            var _a, _b;
+            const old = (_a = d.get) == null ? void 0 : _a.call(this);
+            (_b = d.set) == null ? void 0 : _b.call(this, v);
             const event = isPf ? "change" : "input";
             if (v !== old) this.dispatchEvent(new Event(event, { bubbles: true }));
           }
@@ -138,7 +152,12 @@
       });
     }
   }
+  function getVersion() {
+    return "1.0.0";
+  }
   if (typeof window !== "undefined") {
     window.toggleDisplay = toggleDisplay;
+    window.toggleDisplayVersion = getVersion;
   }
 })();
+//# sourceMappingURL=toggleDisplay.js.map

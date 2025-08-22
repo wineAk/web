@@ -86,6 +86,17 @@ function setTargetDisplay(targets: target[], isDisplay: boolean) {
 // 表示・非表示の切り替え関数
 export function toggleDisplay(object: toggleDisplay) {
   const { source, targets } = object;
+  
+  // バリデーション
+  if (!source || !source.selector) {
+    console.error("[toggleDisplay] ソースの設定が不正です");
+    return;
+  }
+  if (!targets || !Array.isArray(targets) || targets.length === 0) {
+    console.error("[toggleDisplay] ターゲットの設定が不正です");
+    return;
+  }
+  
   const sourceElement = getSelectorElement(source.selector);
   if (sourceElement == null) {
     console.error("[toggleDisplay] ソースのセレクターが見つかりません", source.selector);
@@ -202,9 +213,15 @@ export function toggleDisplay(object: toggleDisplay) {
   }
 }
 
+// バージョン情報を取得する関数
+export function getVersion(): string {
+  return "{{VERSION}}";
+}
+
 // ブラウザで実行する場合はwindowオブジェクトにtoggleDisplay関数を追加する
 if (typeof window !== "undefined") {
   (window as any).toggleDisplay = toggleDisplay;
+  (window as any).toggleDisplayVersion = getVersion;
 }
 
 /*
