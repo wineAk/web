@@ -1,6 +1,6 @@
 {
   "name": "toggle-display",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Toggle display functionality for form elements",
   "scripts": {
     "build": "node scripts/build.js",

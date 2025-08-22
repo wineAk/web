@@ -10,6 +10,13 @@
       }
     });
   }
+  if (typeof window !== "undefined") {
+    window.addEventListener("pageshow", () => {
+      document.querySelectorAll('[type="file"]').forEach((e) => e.value = "");
+      const submitBtn = document.querySelector('.row.submit_btn input[type="submit"]');
+      if (submitBtn) submitBtn.disabled = false;
+    });
+  }
   function getSelectorElement(selector) {
     const nameElm = document.querySelector(`[name="${selector}"]`);
     if (nameElm) return nameElm;
@@ -48,7 +55,7 @@
       if (labelElm) {
         labelElm.classList.toggle("required", required != null ? required : false);
       }
-      const requiredElm = targetParentElm.querySelector('[type="number"], [type="password"], [type="radio"], [type="text"], select, textarea');
+      const requiredElm = targetParentElm.querySelector('[type="file"], [type="number"], [type="password"], [type="radio"], [type="text"], select, textarea');
       if (requiredElm) {
         requiredElm.required = required != null ? required : false;
       }
@@ -196,7 +203,7 @@
     }
   }
   function getVersion() {
-    return "1.0.0";
+    return "1.0.1";
   }
   if (typeof window !== "undefined") {
     window.toggleDisplay = toggleDisplay;

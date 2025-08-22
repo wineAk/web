@@ -13,6 +13,17 @@ if (typeof (window as any).jQuery !== "undefined" && (window as any).jQuery.date
   });
 }
 
+// ページ表示時の不具合修正
+if (typeof window !== "undefined") {
+  window.addEventListener("pageshow", () => {
+    // ファイル入力をクリア
+    document.querySelectorAll('[type="file"]').forEach((e) => ((e as HTMLInputElement).value = ""));
+    // 送信ボタンを有効化（Fixed 4459）
+    const submitBtn = document.querySelector('.row.submit_btn input[type="submit"]') as HTMLInputElement | null;
+    if (submitBtn) submitBtn.disabled = false;
+  });
+}
+
 // selectorからElementを取得する関数
 function getSelectorElement(selector: string): selectorElement {
   const nameElm = document.querySelector(`[name="${selector}"]`);
@@ -60,7 +71,7 @@ function setTargetDisplay(targets: target[], isDisplay: boolean) {
       labelElm.classList.toggle("required", required ?? false);
     }
     // 特定の要素のみ必須化
-    const requiredElm = targetParentElm.querySelector('[type="number"], [type="password"], [type="radio"], [type="text"], select, textarea') as HTMLInputElement | HTMLSelectElement | null;
+    const requiredElm = targetParentElm.querySelector('[type="file"], [type="number"], [type="password"], [type="radio"], [type="text"], select, textarea') as HTMLInputElement | HTMLSelectElement | null;
     if (requiredElm) {
       requiredElm.required = required ?? false;
     }
@@ -174,7 +185,7 @@ export function toggleDisplay(object?: toggleDisplay) {
     });
     // 監視オプションの設定
     const config = { childList: true, subtree: true };
-    observer.observe(sourceElement, config); 
+    observer.observe(sourceElement, config);
     // 要素が削除された時にobserverを破棄（メモリリーク防止）
     const disconnectObserver = () => {
       observer.disconnect();
