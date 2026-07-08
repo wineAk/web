@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>toggleDisplay select test</title>
+  <style>
+    li.clr { margin: 8px 0; padding: 8px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>プルダウン source テスト</h1>
+  <ul>
+    <li class="clr">
+      <select name="wf99999000002">
+        <option value="">未選択</option>
+        <option value="test_select_x">選択肢X</option>
+        <option value="test_select_y">選択肢Y</option>
+        <option value="test_select_z">選択肢Z</option>
+      </select>
+    </li>
+    <li class="clr" id="target15">
+      <input type="text" name="wf99999000015" placeholder="target 15">
+    </li>
+    <li class="clr" id="target16">
+      <input type="text" name="wf99999000016" placeholder="target 16">
+    </li>
+  </ul>
+  <div id="result"></div>
+
+  <script src="helpers.js"></script>
+  <script src="../dist/td.js"></script>
+  <script>
+    function selectOption(value) {
+      const select = document.querySelector('[name="wf99999000002"]');
+      select.value = value;
+      select.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    toggleDisplay({
+      source: { selector: "wf99999000002", values: ["test_select_x"] },
+      targets: [{ selector: "wf99999000015" }],
+    });
+    toggleDisplay({
+      source: { selector: "wf99999000002", values: ["test_select_y"] },
+      targets: [{ selector: "wf99999000016" }],
+    });
+
+    assert("初期: target15 非表示", !isTargetVisibleById("target15"));
+    assert("初期: target16 非表示", !isTargetVisibleById("target16"));
+
+    selectOption("test_select_x");
+    assert("X選択: target15 表示", isTargetVisibleById("target15"));
+    assert("X選択: target16 非表示", !isTargetVisibleById("target16"));
+
+    selectOption("test_select_y");
+    assert("Y選択: target15 非表示", !isTargetVisibleById("target15"));
+    assert("Y選択: target16 表示", isTargetVisibleById("target16"));
+
+    selectOption("test_select_z");
+    assert("Z選択: target15 非表示", !isTargetVisibleById("target15"));
+    assert("Z選択: target16 非表示", !isTargetVisibleById("target16"));
+
+    selectOption("");
+    assert("未選択: target15 非表示", !isTargetVisibleById("target15"));
+    assert("未選択: target16 非表示", !isTargetVisibleById("target16"));
+
+    showAllPassed();
+  </script>
+</body>
+</html>

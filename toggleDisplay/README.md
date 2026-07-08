@@ -25,6 +25,13 @@ npm run dev
 npm run build
 ```
 
+## テスト
+
+```bash
+# Chromium 取得 → ビルド → 全7件の Playwright テスト
+npm run test
+```
+
 ## 💻 使い方
 
 ### CDN
@@ -105,6 +112,36 @@ addEventListener('pageshow', () => {
 console.log(window.toggleDisplayVersion()); // "1.0.0"
 ```
 
+### デバッグログ（動かない原因の調査用）
+
+```javascript
+// デバッグON（localStorageに保存され、次回以降も有効）
+toggleDisplaySetDebug(true);
+
+// またはコンソールから事前設定（スクリプト読み込み前でも可）
+localStorage.setItem('toggleDisplayDebug', 'true');
+
+// デバッグOFF
+toggleDisplaySetDebug(false);
+
+// 状態確認
+console.log(toggleDisplayIsDebug()); // true / false
+```
+
+デバッグON時、コンソールに `[toggleDisplay:debug][カテゴリ]` 形式でログが出力されます。
+
+| カテゴリ | 確認できること |
+|---------|--------------|
+| `init` | スクリプト読み込み完了 |
+| `pageshow` | ライブラリ内 pageshow 発火 |
+| `toggle` | toggleDisplay 呼び出し・source 種別判定 |
+| `selector` | 要素解決（name / file_view_ID / label） |
+| `target` | 表示切替・required 制御 |
+| `registry` | ルール評価結果（evaluationResults） |
+| `checkbox` | チェックボックス必須化の同期 |
+
+**注意:** `values` には選択肢の **表示ラベルではなく value属性** を指定してください。デバッグログの `radioOptions` / `selectOptions` で実際の value を確認できます。
+
 ## 🛠️ 対応要素
 
 | 要素タイプ | セレクター | 説明 |
@@ -132,6 +169,9 @@ console.log(window.toggleDisplayVersion()); // "1.0.0"
 3. **ビルドエラー**
    - `npm install` で依存関係を確認
    - TypeScriptエラーを確認
+
+4. **テストが `Executable doesn't exist` で落ちる**
+   - `npx playwright install chromium` を手動実行（通常は `npm run test` 内で自動解決）
 
 ## 📝 ライセンス
 

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>toggleDisplay address set test</title>
+  <style>
+    li.clr { margin: 8px 0; padding: 8px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>住所セット source テスト</h1>
+  <ul>
+    <li class="clr">
+      <select name="wf99999000021-pf">
+        <option value="">未選択</option>
+        <option value="13">東京都</option>
+        <option value="27">大阪府</option>
+      </select>
+    </li>
+    <li class="clr">
+      <input type="text" name="wf99999000021-ct" placeholder="市区町村">
+    </li>
+    <li class="clr" id="target14">
+      <input type="text" name="wf99999000014" placeholder="target 14">
+    </li>
+  </ul>
+  <div id="result"></div>
+
+  <script src="helpers.js"></script>
+  <script src="../dist/td.js"></script>
+  <script>
+    function runSetup() {
+      toggleDisplay({
+        source: { selector: "wf99999000021-pf", values: [".+"] },
+        targets: [{ selector: "wf99999000014" }],
+      });
+      toggleDisplay({
+        source: { selector: "wf99999000021-ct" },
+        targets: [{ selector: "wf99999000014" }],
+      });
+    }
+
+    runSetup();
+
+    assert("初期: target14 非表示", !isTargetVisibleById("target14"));
+
+    const pfSelect = document.querySelector('[name="wf99999000021-pf"]');
+    pfSelect.value = "13";
+    assert("pf変更後: target14 表示", isTargetVisibleById("target14"));
+
+    pfSelect.value = "";
+    assert("pfクリア後: target14 非表示", !isTargetVisibleById("target14"));
+
+    const ctInput = document.querySelector('[name="wf99999000021-ct"]');
+    ctInput.value = "渋谷区";
+    assert("ct変更後: target14 表示", isTargetVisibleById("target14"));
+
+    ctInput.value = "";
+    assert("ctクリア後: target14 非表示", !isTargetVisibleById("target14"));
+
+    runSetup();
+    ctInput.value = "再実行テスト";
+    assert("pageshow後: target14 表示", isTargetVisibleById("target14"));
+
+    showAllPassed();
+  </script>
+</body>
+</html>

@@ -1,12 +1,14 @@
 {
   "name": "toggle-display",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Toggle display functionality for form elements",
   "scripts": {
     "build": "node scripts/build.js",
-    "dev": "node scripts/build.js"
+    "dev": "node scripts/build.js",
+    "test": "playwright install chromium && npm run build && node test/run-all.cjs"
   },
   "devDependencies": {
-    "esbuild": "^0.25.9"
+    "esbuild": "^0.28.1",
+    "playwright": "^1.61.1"
   }
 }

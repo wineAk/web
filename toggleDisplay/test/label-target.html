@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>toggleDisplay label target test</title>
+  <style>
+    li.clr { margin: 8px 0; padding: 8px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>グループラベル target テスト</h1>
+  <ul>
+    <li class="clr">
+      <input type="text" name="wf99999000053" placeholder="入力でラベル表示">
+    </li>
+    <li class="label extra" id="labelTarget">テスト用グループラベル</li>
+    <li class="clr">
+      <input type="text" name="wf99999000017" placeholder="ラベル配下フィールド">
+    </li>
+  </ul>
+  <div id="result"></div>
+
+  <script src="helpers.js"></script>
+  <script src="../dist/td.js"></script>
+  <script>
+    function setSourceValue(value) {
+      const el = document.querySelector('[name="wf99999000053"]');
+      el.value = value;
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+
+    toggleDisplay({
+      source: { selector: "wf99999000053" },
+      targets: [{ selector: "テスト用グループラベル" }],
+    });
+
+    assert("初期: グループラベル非表示", !isLabelVisible("テスト用グループラベル"));
+
+    setSourceValue("show");
+    assert("入力後: グループラベル表示", isLabelVisible("テスト用グループラベル"));
+    assert("label extra でも classList.contains(label) で動作", document.getElementById("labelTarget").classList.contains("label"));
+
+    setSourceValue("");
+    assert("クリア後: グループラベル非表示", !isLabelVisible("テスト用グループラベル"));
+
+    showAllPassed();
+  </script>
+</body>
+</html>

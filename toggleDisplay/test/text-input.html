@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>toggleDisplay text input test</title>
+  <style>
+    li.clr { margin: 8px 0; padding: 8px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>テキスト入力 source テスト</h1>
+  <ul>
+    <li class="clr">
+      <input type="text" name="wf99999000051" placeholder="一行テキスト">
+    </li>
+    <li class="clr" id="target11">
+      <input type="text" name="wf99999000011" placeholder="target 11">
+    </li>
+    <li class="clr">
+      <textarea name="wf99999000052" placeholder="複数行テキスト"></textarea>
+    </li>
+    <li class="clr" id="target12">
+      <input type="text" name="wf99999000012" placeholder="target 12">
+    </li>
+  </ul>
+  <div id="result"></div>
+
+  <script src="helpers.js"></script>
+  <script src="../dist/td.js"></script>
+  <script>
+    function runSetup() {
+      toggleDisplay({
+        source: { selector: "wf99999000051" },
+        targets: [{ selector: "wf99999000011" }],
+      });
+      toggleDisplay({
+        source: { selector: "wf99999000052" },
+        targets: [{ selector: "wf99999000012" }],
+      });
+    }
+
+    function setInputValue(name, value) {
+      const el = document.querySelector(`[name="${name}"]`);
+      el.value = value;
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+
+    runSetup();
+
+    assert("初期: target11 非表示", !isTargetVisibleByName("wf99999000011"));
+    assert("初期: target12 非表示", !isTargetVisibleByName("wf99999000012"));
+
+    setInputValue("wf99999000051", "hello");
+    assert("一行入力後: target11 表示", isTargetVisibleByName("wf99999000011"));
+
+    setInputValue("wf99999000051", "");
+    assert("一行クリア後: target11 非表示", !isTargetVisibleByName("wf99999000011"));
+
+    setInputValue("wf99999000052", "textarea text");
+    assert("textarea入力後: target12 表示", isTargetVisibleByName("wf99999000012"));
+
+    runSetup();
+    setInputValue("wf99999000051", "pageshow");
+    assert("pageshow後: target11 表示", isTargetVisibleByName("wf99999000011"));
+    setInputValue("wf99999000051", "");
+    assert("pageshow後クリア: target11 非表示", !isTargetVisibleByName("wf99999000011"));
+
+    showAllPassed();
+  </script>
+</body>
+</html>

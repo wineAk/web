@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>toggleDisplay file observer test</title>
+  <style>
+    li.clr { margin: 8px 0; padding: 8px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>ファイル表示 source テスト</h1>
+  <ul>
+    <li class="clr">
+      <p id="file_view_wf99999000031"></p>
+    </li>
+    <li class="clr" id="target13">
+      <input type="text" name="wf99999000013" placeholder="target 13">
+    </li>
+  </ul>
+  <div id="result"></div>
+
+  <script src="helpers.js"></script>
+  <script src="../dist/td.js"></script>
+  <script>
+    function runSetup() {
+      toggleDisplay({
+        source: { selector: "wf99999000031" },
+        targets: [{ selector: "wf99999000013" }],
+      });
+    }
+
+    function waitForObserver() {
+      return new Promise((resolve) => queueMicrotask(resolve));
+    }
+
+    const fileView = document.getElementById("file_view_wf99999000031");
+
+    (async () => {
+      runSetup();
+
+      assert("初期: target13 非表示", !isTargetVisibleById("target13"));
+
+      const child = document.createElement("span");
+      child.textContent = "uploaded.pdf";
+      fileView.appendChild(child);
+      await waitForObserver();
+      assert("子要素追加後: target13 表示", isTargetVisibleById("target13"));
+
+      fileView.innerHTML = "";
+      await waitForObserver();
+      assert("子要素削除後: target13 非表示", !isTargetVisibleById("target13"));
+
+      runSetup();
+      const child2 = document.createElement("span");
+      child2.textContent = "uploaded2.pdf";
+      fileView.appendChild(child2);
+      await waitForObserver();
+      assert("pageshow後: target13 表示", isTargetVisibleById("target13"));
+
+      showAllPassed();
+      window.__testsComplete = true;
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>toggleDisplay checkbox required test</title>
+  <style>
+    li.clr { margin: 8px 0; padding: 8px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>チェックボックス required テスト</h1>
+  <ul>
+    <li class="clr">
+      <input type="text" name="wf99999000051" placeholder="入力で下を表示">
+    </li>
+    <li class="clr" id="targetGroupA">
+      <label><input type="checkbox" name="wf99999000041" value="test_check_a"> A</label>
+      <label><input type="checkbox" name="wf99999000041" value="test_check_b"> B</label>
+      <label><input type="checkbox" name="wf99999000041" value="test_check_c"> C</label>
+    </li>
+    <li class="clr">
+      <label><input type="checkbox" name="wf99999000042" value="test_check_x"> X</label>
+      <label><input type="checkbox" name="wf99999000042" value="test_check_y"> Y</label>
+    </li>
+  </ul>
+  <div id="result"></div>
+
+  <script src="helpers.js"></script>
+  <script src="../dist/td.js"></script>
+  <script>
+    function getGroup(name) {
+      return Array.from(document.querySelectorAll(`[name="${name}"][type="checkbox"]`));
+    }
+
+    toggleDisplay({
+      source: { selector: "wf99999000051" },
+      targets: [{ selector: "wf99999000041", required: true }],
+    });
+
+    const trigger = document.querySelector('[name="wf99999000051"]');
+    trigger.value = "show";
+    trigger.dispatchEvent(new Event("input", { bubbles: true }));
+
+    const groupA = getGroup("wf99999000041");
+    const groupB = getGroup("wf99999000042");
+
+    assert("初期: group_a 全て required=true", groupA.every((el) => el.required === true));
+    assert("初期: group_b は required=false", groupB.every((el) => el.required === false));
+
+    groupA[0].checked = true;
+    groupA[0].dispatchEvent(new Event("change", { bubbles: true }));
+
+    assert("1つチェック後: group_a 全て required=false", groupA.every((el) => el.required === false));
+    assert("1つチェック後: group_b は影響なし", groupB.every((el) => el.required === false));
+
+    groupA[1].checked = true;
+    groupA[1].dispatchEvent(new Event("change", { bubbles: true }));
+    assert("追加チェック後も: group_a 全て required=false", groupA.every((el) => el.required === false));
+
+    groupA[0].checked = false;
+    groupA[1].checked = false;
+    groupA[0].dispatchEvent(new Event("change", { bubbles: true }));
+    assert("チェック解除後: group_a 全て required=true", groupA.every((el) => el.required === true));
+
+    showAllPassed();
+  </script>
+</body>
+</html>
